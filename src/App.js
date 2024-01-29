@@ -20,11 +20,13 @@ import ProductAddScreen from './screens/ProductAddScreen'
 import ProductEditScreen from './screens/ProductEditScreen'
 import OrderListScreen from './screens/OrderListScreen'
 import ProductsScreen from './screens/ProductsScreen'
+// import UpgradeScreen from './screens/UpgradeScreen'
 
 // import UploadProductsScreen from './screens/UploadProductsScreen'
 const App = () => {
   return (
     <Router>
+      {/* <Route path="/upgrade" component={UpgradeScreen} exact /> */}
       <Header />
       <main className="py-3">
         <Container>

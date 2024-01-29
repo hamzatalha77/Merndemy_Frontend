@@ -9,7 +9,7 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import Paginate from '../components/Paginate'
 import ProductCarousel from '../components/ProductCarousel'
-import Categories from '../components/Categories'
+
 const HomeScreen = ({ match }) => {
   const keyword = match.params.keyword
 
@@ -35,7 +35,7 @@ const HomeScreen = ({ match }) => {
         </Link>
       )}
 
-      <h1>latest products</h1>
+      <h1>Latest Products</h1>
       {loading ? (
         <Loader></Loader>
       ) : error ? (

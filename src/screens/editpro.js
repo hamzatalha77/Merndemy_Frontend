@@ -41,7 +41,7 @@ const ProductEditScreen = ({ match, history }) => {
   const {
     loading: loadingUpdate,
     error: errorUpdate,
-    success: successUpdate,
+    success: successUpdate
   } = productUpdate
 
   useEffect(() => {
@@ -74,7 +74,7 @@ const ProductEditScreen = ({ match, history }) => {
         brand,
         category,
         countInStock,
-        description,
+        description
       })
     )
   }
