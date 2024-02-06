@@ -9,11 +9,11 @@ import Loader from '../components/Loader'
 import {
   getOrderDetails,
   payOrder,
-  deliverOrder,
+  deliverOrder
 } from '../actions/orderActions'
 import {
   ORDER_PAY_RESET,
-  ORDER_DELIVER_RESET,
+  ORDER_DELIVER_RESET
 } from '../constants/orderConstants'
 
 const OrderScreen = ({ match, history }) => {
@@ -53,7 +53,9 @@ const OrderScreen = ({ match, history }) => {
       history.push('/login')
     }
     const addPayPalScript = async () => {
-      const { data: clientId } = await axios.get('/api/config/paypal')
+      const { data: clientId } = await axios.get(
+        'https://merndemy-backend.vercel.app/api/config/paypal'
+      )
       const script = document.createElement('script')
       script.type = 'text/javascript'
       script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`

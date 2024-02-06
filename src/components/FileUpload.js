@@ -7,19 +7,21 @@ const FileUpload = (props) => {
   const onDrop = (files) => {
     let formData = new FormData()
     const config = {
-      header: { 'content-type': 'multipart/form-data' },
+      header: { 'content-type': 'multipart/form-data' }
     }
     formData.append('file', files[0])
-    Axios.post('/api/products/uploadImage', formData, config).then(
-      (response) => {
-        if (response.data.success) {
-          setImages([...Images, response.data.image])
-          props.refreshFunction([...Images, response.data.image])
-        } else {
-          alert('faild to upload')
-        }
+    Axios.post(
+      'https://merndemy-backend.vercel.app/api/products/uploadImage',
+      formData,
+      config
+    ).then((response) => {
+      if (response.data.success) {
+        setImages([...Images, response.data.image])
+        props.refreshFunction([...Images, response.data.image])
+      } else {
+        alert('faild to upload')
       }
-    )
+    })
   }
   return (
     <div>
@@ -32,7 +34,7 @@ const FileUpload = (props) => {
               border: '1px solid lightgray',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
+              justifyContent: 'center'
             }}
             {...getRootProps()}
           >
