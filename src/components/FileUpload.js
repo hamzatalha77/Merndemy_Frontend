@@ -1,5 +1,4 @@
 import { Axios } from 'axios'
-import { response } from 'express'
 import React, { useState } from 'react'
 import Dropzone from 'react-dropzone'
 const FileUpload = (props) => {

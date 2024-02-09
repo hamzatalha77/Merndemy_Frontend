@@ -68,7 +68,6 @@ const ProductEditScreen = ({ match, history }) => {
     )
   }
   const uploadFileHandler = async (e) => {
-    // let files = e.target.files
     const newFiles = []
     for (let i = 0; i < e.target.files.length; i++) {
       newFiles.push(e.target.files[i])

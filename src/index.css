@@ -1,8 +1,5 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 body {
-  background-color: antiquewhite;
+  background-color: white;
 }
 main {
   min-height: 80vh;

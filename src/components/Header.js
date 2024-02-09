@@ -15,7 +15,7 @@ const Header = () => {
   }
   return (
     <header>
-      <Navbar bg="info" variant="info" expand="lg" collapseOnSelect>
+      <Navbar bg="white" variant="white" expand="lg" collapseOnSelect>
         <Container fluid>
           <LinkContainer to="/">
             <Navbar.Brand>PentaShop</Navbar.Brand>
