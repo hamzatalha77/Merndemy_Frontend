@@ -8,7 +8,7 @@ import Message from '../components/Message'
 import Meta from '../components/Meta'
 import {
   listProductDetails,
-  createProductReview,
+  createProductReview
 } from '../actions/productActions'
 import { createWish } from '../actions/wishActions'
 import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants'
@@ -30,7 +30,7 @@ const ProductScreen = ({ history, match }) => {
   const {
     success: successProductReview,
     loading: loadingProductReview,
-    error: errorProductReview,
+    error: errorProductReview
   } = productReviewCreate
 
   const wishCreate = useSelector((state) => state.wishCreate)
@@ -56,7 +56,14 @@ const ProductScreen = ({ history, match }) => {
   const addToWishHandler = () => {
     dispatch(
       createWish({
-        wishItems: productDetails.product._id,
+        wishItems: [
+          {
+            name: product.name,
+            image: product.image,
+            price: product.price,
+            product: product._id
+          }
+        ]
       })
     )
   }
@@ -147,7 +154,7 @@ const ProductScreen = ({ history, match }) => {
                   <ListGroup.Item
                     style={{
                       justifyContent: 'center',
-                      display: 'flex',
+                      display: 'flex'
                     }}
                   >
                     <Button

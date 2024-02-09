@@ -22,16 +22,13 @@ export const createWish = (wish) => async (dispatch, getState) => {
       }
     }
 
-    const { data } = await axios.post(
-      `https://merndemy-backend.vercel.app/api/wish`,
-      wish,
-      config
-    )
+    const { data } = await axios.post(`/api/wish`, wish, config)
 
     dispatch({
       type: WISH_CREATE_SUCCESS,
       payload: data
     })
+    localStorage.removeItem('wishItems')
   } catch (error) {
     const message =
       error.response && error.response.data.message

@@ -117,3 +117,6 @@ h2 {
   color: #000;
   /*Set to match the Tailwind colour you want the active one to be */
 }
+.product-name {
+  text-decoration: none;
+}
