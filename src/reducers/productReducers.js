@@ -22,7 +22,10 @@ import {
   PRODUCT_CREATE_REVIEW_RESET,
   PRODUCT_TOP_REQUEST,
   PRODUCT_TOP_SUCCESS,
-  PRODUCT_TOP_FAIL
+  PRODUCT_TOP_FAIL,
+  PRODUCT_ADD_TO_WISHLIST_REQUEST,
+  PRODUCT_ADD_TO_WISHLIST_SUCCESS,
+  PRODUCT_ADD_TO_WISHLIST_FAIL
   // PRODUCT_CATEGORY_REQUEST,
   // PRODUCT_CATEGORY_SUCCESS,
   // PRODUCT_CATEGORY_FAIL,
@@ -110,6 +113,18 @@ export const productReviewCreateReducer = (state = {}, action) => {
       return { loading: false, error: action.payload }
     case PRODUCT_CREATE_REVIEW_RESET:
       return {}
+    default:
+      return state
+  }
+}
+export const productWishlistReducer = (state = {}, action) => {
+  switch (action.type) {
+    case PRODUCT_ADD_TO_WISHLIST_REQUEST:
+      return { loading: true }
+    case PRODUCT_ADD_TO_WISHLIST_SUCCESS:
+      return { loading: false, success: true }
+    case PRODUCT_ADD_TO_WISHLIST_FAIL:
+      return { loading: false, error: action.payload }
     default:
       return state
   }

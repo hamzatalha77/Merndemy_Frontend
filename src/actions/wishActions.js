@@ -5,6 +5,7 @@ import {
   WISH_CREATE_FAIL
 } from '../constants/wishConstants'
 import { logout } from './userActions'
+
 export const createWish = (wish) => async (dispatch, getState) => {
   try {
     dispatch({
@@ -22,7 +23,7 @@ export const createWish = (wish) => async (dispatch, getState) => {
       }
     }
 
-    const { data } = await axios.post(`/api/wish`, wish, config)
+    const { data } = await axios.put(`/api/products/wishlist`, wish, config)
 
     dispatch({
       type: WISH_CREATE_SUCCESS,

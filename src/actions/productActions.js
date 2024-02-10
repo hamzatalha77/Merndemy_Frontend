@@ -20,7 +20,10 @@ import {
   PRODUCT_CREATE_REVIEW_FAIL,
   PRODUCT_TOP_REQUEST,
   PRODUCT_TOP_SUCCESS,
-  PRODUCT_TOP_FAIL
+  PRODUCT_TOP_FAIL,
+  PRODUCT_ADD_TO_WISHLIST_REQUEST,
+  PRODUCT_ADD_TO_WISHLIST_SUCCESS,
+  PRODUCT_ADD_TO_WISHLIST_FAIL
 } from '../constants/productConstants'
 import { logout } from './userActions'
 
@@ -279,3 +282,41 @@ export const listTopProducts = () => async (dispatch) => {
     })
   }
 }
+
+export const productAddToWishlist =
+  (productId) => async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: PRODUCT_ADD_TO_WISHLIST_REQUEST
+      })
+
+      const {
+        userLogin: { userInfo }
+      } = getState()
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfo.token}`
+        }
+      }
+
+      await axios.put(`/api/products/wishlist`, { productId }, config)
+
+      dispatch({
+        type: PRODUCT_ADD_TO_WISHLIST_SUCCESS
+      })
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      if (message === 'Not authorized, token failed') {
+        dispatch(logout())
+      }
+      dispatch({
+        type: PRODUCT_ADD_TO_WISHLIST_FAIL,
+        payload: message
+      })
+    }
+  }

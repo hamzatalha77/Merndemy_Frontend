@@ -9,6 +9,7 @@ import {
   productUpdateReducer,
   productReviewCreateReducer,
   productTopRatedReducer,
+  productWishlistReducer
 } from './reducers/productReducers.js'
 import { cartReducer } from './reducers/cartReducer'
 import {
@@ -18,7 +19,7 @@ import {
   userUpdateProfileReducer,
   userListReducer,
   userDeleteReducer,
-  userUpdateReducer,
+  userUpdateReducer
 } from './reducers/userReducer'
 
 import {
@@ -27,9 +28,10 @@ import {
   orderPayReducer,
   orderListMyReducer,
   orderListReducer,
-  orderDeliverReducer,
+  orderDeliverReducer
 } from './reducers/orderReducer'
 import { wishCreateReducer } from './reducers/wishReducer'
+
 const reducer = combineReducers({
   productList: productListReducer,
   productDetails: productDetailsReducer,
@@ -37,6 +39,7 @@ const reducer = combineReducers({
   productCreate: productCreateReducer,
   productUpdate: productUpdateReducer,
   productReviewCreate: productReviewCreateReducer,
+  productWishlist: productWishlistReducer,
   productTopRated: productTopRatedReducer,
   // productCategory: productCategoryReducer,
   cart: cartReducer,
@@ -53,7 +56,7 @@ const reducer = combineReducers({
   orderDeliver: orderDeliverReducer,
   orderListMy: orderListMyReducer,
   orderList: orderListReducer,
-  wishCreate: wishCreateReducer,
+  wishCreate: wishCreateReducer
 })
 
 const cartItemsFromStorage = localStorage.getItem('cartItems')
@@ -71,9 +74,9 @@ const shippingAddressFromStorage = localStorage.getItem('shippingAddress')
 const initialState = {
   cart: {
     cartItems: cartItemsFromStorage,
-    shippingAddress: shippingAddressFromStorage,
+    shippingAddress: shippingAddressFromStorage
   },
-  userLogin: { userInfo: userInfoFromStorage },
+  userLogin: { userInfo: userInfoFromStorage }
 }
 
 const middleware = [thunk]

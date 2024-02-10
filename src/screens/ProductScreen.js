@@ -8,7 +8,8 @@ import Message from '../components/Message'
 import Meta from '../components/Meta'
 import {
   listProductDetails,
-  createProductReview
+  createProductReview,
+  productAddToWishlist
 } from '../actions/productActions'
 import { createWish } from '../actions/wishActions'
 import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants'
@@ -33,12 +34,16 @@ const ProductScreen = ({ history, match }) => {
     error: errorProductReview
   } = productReviewCreate
 
-  const wishCreate = useSelector((state) => state.wishCreate)
-  const { wish, success: wishSuccess, error: wishError } = wishCreate
+  const productWishlist = useSelector((state) => state.productWishlist)
+  const {
+    success: wishSuccess,
+    loading: loadingWish,
+    error: wishError
+  } = productWishlist
 
   useEffect(() => {
     if (wishSuccess) {
-      history.push(`/wish/${wish._id}`)
+      alert('This item has been added to your wish list')
     }
 
     if (successProductReview) {
@@ -54,18 +59,7 @@ const ProductScreen = ({ history, match }) => {
     history.push(`/cart/${match.params.id}?qty=${qty}`)
   }
   const addToWishHandler = () => {
-    dispatch(
-      createWish({
-        wishItems: [
-          {
-            name: product.name,
-            image: product.image,
-            price: product.price,
-            product: product._id
-          }
-        ]
-      })
-    )
+    dispatch(productAddToWishlist(match.params.id)) // Dispatch addToWishlist action when the button is clicked
   }
 
   const submitHandler = (e) => {
@@ -187,7 +181,7 @@ const ProductScreen = ({ history, match }) => {
                   </ListGroup.Item>
                 ))}
                 <ListGroup.Item>
-                  <h2>Write a Customar Review</h2>
+                  <h2>Write a Customer Review</h2>
                   {successProductReview && (
                     <Message variant="success">
                       Review submitted successfully
