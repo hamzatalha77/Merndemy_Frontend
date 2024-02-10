@@ -11,7 +11,7 @@ import {
   createProductReview,
   productAddToWishlist
 } from '../actions/productActions'
-import { createWish } from '../actions/wishActions'
+
 import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants'
 
 const ProductScreen = ({ history, match }) => {
@@ -47,7 +47,6 @@ const ProductScreen = ({ history, match }) => {
     }
 
     if (successProductReview) {
-      // alert('Review Submitted!')
       setRating(0)
       setComment('')
     }
@@ -59,7 +58,7 @@ const ProductScreen = ({ history, match }) => {
     history.push(`/cart/${match.params.id}?qty=${qty}`)
   }
   const addToWishHandler = () => {
-    dispatch(productAddToWishlist(match.params.id)) // Dispatch addToWishlist action when the button is clicked
+    dispatch(productAddToWishlist(match.params.id))
   }
 
   const submitHandler = (e) => {
