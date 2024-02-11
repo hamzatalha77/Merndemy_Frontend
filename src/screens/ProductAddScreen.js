@@ -57,11 +57,7 @@ const ProductAddScreen = ({ history }) => {
         }
       }
 
-      const { data } = await axios.post(
-        'https://merndemy-backend.vercel.app/api/upload',
-        formData,
-        config
-      )
+      const { data } = await axios.post('/api/upload', formData, config)
 
       console.log(data)
       setImage(data)

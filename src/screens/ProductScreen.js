@@ -65,9 +65,9 @@ const ProductScreen = ({ history, match }) => {
       userInfo && userInfo.wishlist && userInfo.wishlist.includes(product._id)
 
     if (isInwishlist) {
-      dispatch(productRemoveFromWishlist(product._id)) // Corrected: use product._id
+      dispatch(productRemoveFromWishlist(product._id))
     } else {
-      dispatch(productAddToWishlist(product._id)) // Corrected: use product._id
+      dispatch(productAddToWishlist(product._id))
     }
   }
 
