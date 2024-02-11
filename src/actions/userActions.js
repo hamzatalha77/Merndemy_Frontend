@@ -50,7 +50,8 @@ export const login = (email, password) => async (dispatch) => {
       payload: data
     })
 
-    localStorage.setItem('userInfo', JSON.stringify(data))
+    const userInfoWithWishlist = { ...data, wishlist: [] } // Initialize wishlist array
+    localStorage.setItem('userInfo', JSON.stringify(userInfoWithWishlist))
   } catch (error) {
     dispatch({
       type: USER_LOGIN_FAIL,
@@ -185,7 +186,9 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
       type: USER_LOGIN_SUCCESS,
       payload: data
     })
-    localStorage.setItem('userInfo', JSON.stringify(data))
+    // Update userInfo in local storage with wishlist data
+    const userInfoWithWishlist = { ...data, wishlist: userInfo.wishlist } // Preserve wishlist data
+    localStorage.setItem('userInfo', JSON.stringify(userInfoWithWishlist))
   } catch (error) {
     const message =
       error.response && error.response.data.message

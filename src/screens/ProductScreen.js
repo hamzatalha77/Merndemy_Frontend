@@ -55,13 +55,19 @@ const ProductScreen = ({ history, match }) => {
     history.push(`/cart/${match.params.id}?qty=${qty}`)
   }
   const addToWishHandler = () => {
-    const isInWishlist =
+    console.log(userInfo)
+    console.log(product._id)
+    console.log(userInfo && userInfo.wishlist)
+    console.log(
+      userInfo && userInfo.wishlist && userInfo.wishlist.includes(product._id)
+    )
+    const isInwishlist =
       userInfo && userInfo.wishlist && userInfo.wishlist.includes(product._id)
 
-    if (isInWishlist) {
-      dispatch(productRemoveFromWishlist(match.params.id))
+    if (isInwishlist) {
+      dispatch(productRemoveFromWishlist(product._id)) // Corrected: use product._id
     } else {
-      dispatch(productAddToWishlist(match.params.id))
+      dispatch(productAddToWishlist(product._id)) // Corrected: use product._id
     }
   }
 

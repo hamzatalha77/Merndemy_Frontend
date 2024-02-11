@@ -40,7 +40,6 @@ const reducer = combineReducers({
   productReviewCreate: productReviewCreateReducer,
   productWishlist: productWishlistReducer,
   productTopRated: productTopRatedReducer,
-  // productCategory: productCategoryReducer,
   cart: cartReducer,
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
