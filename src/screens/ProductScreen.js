@@ -9,7 +9,8 @@ import Meta from '../components/Meta'
 import {
   listProductDetails,
   createProductReview,
-  productAddToWishlist
+  productAddToWishlist,
+  productRemoveFromWishlist
 } from '../actions/productActions'
 
 import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants'
@@ -42,23 +43,26 @@ const ProductScreen = ({ history, match }) => {
   } = productWishlist
 
   useEffect(() => {
-    if (wishSuccess) {
-      alert('This item has been added to your wish list')
-    }
-
     if (successProductReview) {
       setRating(0)
       setComment('')
     }
     dispatch(listProductDetails(match.params.id))
     dispatch({ type: PRODUCT_CREATE_REVIEW_RESET })
-  }, [dispatch, match, successProductReview, history, wishSuccess])
+  }, [dispatch, match, successProductReview, history])
 
   const addToCartHandler = () => {
     history.push(`/cart/${match.params.id}?qty=${qty}`)
   }
   const addToWishHandler = () => {
-    dispatch(productAddToWishlist(match.params.id))
+    const isInWishlist =
+      userInfo && userInfo.wishlist && userInfo.wishlist.includes(product._id)
+
+    if (isInWishlist) {
+      dispatch(productRemoveFromWishlist(match.params.id))
+    } else {
+      dispatch(productAddToWishlist(match.params.id))
+    }
   }
 
   const submitHandler = (e) => {
@@ -72,8 +76,13 @@ const ProductScreen = ({ history, match }) => {
         Go Home
       </Link>
       <Button onClick={addToWishHandler} className="btn-block" type="button">
-        Add To Wish
+        {userInfo &&
+        userInfo.wishlist &&
+        userInfo.wishlist.includes(product._id)
+          ? 'Remove From Wishlist'
+          : 'Add To Wishlist'}
       </Button>
+
       {loading ? (
         <Loader />
       ) : error ? (

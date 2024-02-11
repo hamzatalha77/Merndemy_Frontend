@@ -25,7 +25,10 @@ import {
   PRODUCT_TOP_FAIL,
   PRODUCT_ADD_TO_WISHLIST_REQUEST,
   PRODUCT_ADD_TO_WISHLIST_SUCCESS,
-  PRODUCT_ADD_TO_WISHLIST_FAIL
+  PRODUCT_ADD_TO_WISHLIST_FAIL,
+  PRODUCT_REMOVE_FROM_WISHLIST_REQUEST,
+  PRODUCT_REMOVE_FROM_WISHLIST_SUCCESS,
+  PRODUCT_REMOVE_FROM_WISHLIST_FAIL
   // PRODUCT_CATEGORY_REQUEST,
   // PRODUCT_CATEGORY_SUCCESS,
   // PRODUCT_CATEGORY_FAIL,
@@ -117,18 +120,7 @@ export const productReviewCreateReducer = (state = {}, action) => {
       return state
   }
 }
-export const productWishlistReducer = (state = {}, action) => {
-  switch (action.type) {
-    case PRODUCT_ADD_TO_WISHLIST_REQUEST:
-      return { loading: true }
-    case PRODUCT_ADD_TO_WISHLIST_SUCCESS:
-      return { loading: false, success: true }
-    case PRODUCT_ADD_TO_WISHLIST_FAIL:
-      return { loading: false, error: action.payload }
-    default:
-      return state
-  }
-}
+
 export const productTopRatedReducer = (state = { products: [] }, action) => {
   switch (action.type) {
     case PRODUCT_TOP_REQUEST:
@@ -142,6 +134,25 @@ export const productTopRatedReducer = (state = { products: [] }, action) => {
       return state
   }
 }
+export const productWishlistReducer = (state = {}, action) => {
+  switch (action.type) {
+    case PRODUCT_ADD_TO_WISHLIST_REQUEST:
+      return { loading: true }
+    case PRODUCT_ADD_TO_WISHLIST_SUCCESS:
+      return { loading: false, success: true }
+    case PRODUCT_ADD_TO_WISHLIST_FAIL:
+      return { loading: false, error: action.payload }
+    case PRODUCT_REMOVE_FROM_WISHLIST_REQUEST:
+      return { loading: true }
+    case PRODUCT_REMOVE_FROM_WISHLIST_SUCCESS:
+      return { loading: false, success: true }
+    case PRODUCT_REMOVE_FROM_WISHLIST_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+
 // export const productCategoryReducer = (state = { products: [] }, action) => {
 //   switch (action.type) {
 //     case PRODUCT_CATEGORY_REQUEST:

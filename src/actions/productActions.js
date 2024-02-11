@@ -23,7 +23,10 @@ import {
   PRODUCT_TOP_FAIL,
   PRODUCT_ADD_TO_WISHLIST_REQUEST,
   PRODUCT_ADD_TO_WISHLIST_SUCCESS,
-  PRODUCT_ADD_TO_WISHLIST_FAIL
+  PRODUCT_ADD_TO_WISHLIST_FAIL,
+  PRODUCT_REMOVE_FROM_WISHLIST_REQUEST,
+  PRODUCT_REMOVE_FROM_WISHLIST_SUCCESS,
+  PRODUCT_REMOVE_FROM_WISHLIST_FAIL
 } from '../constants/productConstants'
 import { logout } from './userActions'
 
@@ -316,6 +319,40 @@ export const productAddToWishlist =
       }
       dispatch({
         type: PRODUCT_ADD_TO_WISHLIST_FAIL,
+        payload: message
+      })
+    }
+  }
+export const productRemoveFromWishlist =
+  (productId) => async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: PRODUCT_REMOVE_FROM_WISHLIST_REQUEST
+      })
+
+      const {
+        userLogin: { userInfo }
+      } = getState()
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfo.token}`
+        }
+      }
+
+      await axios.put(`/api/products/wishlist`, { productId }, config)
+
+      dispatch({
+        type: PRODUCT_REMOVE_FROM_WISHLIST_SUCCESS
+      })
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      dispatch({
+        type: PRODUCT_REMOVE_FROM_WISHLIST_FAIL,
         payload: message
       })
     }
