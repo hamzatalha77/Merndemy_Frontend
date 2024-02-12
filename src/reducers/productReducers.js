@@ -134,20 +134,30 @@ export const productTopRatedReducer = (state = { products: [] }, action) => {
       return state
   }
 }
-export const productWishlistReducer = (
-  state = { loading: false, success: false, error: null },
-  action
-) => {
+export const productWishlistReducer = (state = {}, action) => {
   switch (action.type) {
     case PRODUCT_ADD_TO_WISHLIST_REQUEST:
-    case PRODUCT_REMOVE_FROM_WISHLIST_REQUEST:
-      return { ...state, loading: true, error: null }
+      return { ...state, loading: true }
     case PRODUCT_ADD_TO_WISHLIST_SUCCESS:
-    case PRODUCT_REMOVE_FROM_WISHLIST_SUCCESS:
-      return { ...state, loading: false, success: true }
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        userInfo: action.payload
+      }
     case PRODUCT_ADD_TO_WISHLIST_FAIL:
+      return { ...state, loading: false, error: action.payload }
+    case PRODUCT_REMOVE_FROM_WISHLIST_REQUEST:
+      return { ...state, loading: true }
+    case PRODUCT_REMOVE_FROM_WISHLIST_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        userInfo: action.payload
+      }
     case PRODUCT_REMOVE_FROM_WISHLIST_FAIL:
-      return { ...state, loading: false, success: false, error: action.payload }
+      return { ...state, loading: false, error: action.payload }
     default:
       return state
   }
