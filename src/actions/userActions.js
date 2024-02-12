@@ -103,6 +103,7 @@ export const register = (name, email, password) => async (dispatch) => {
       payload: data
     })
 
+    // Update userInfo in local storage with wishlist data
     const userInfoWithWishlist = { ...data, wishlist: [] }
     localStorage.setItem('userInfo', JSON.stringify(userInfoWithWishlist))
   } catch (error) {
@@ -115,7 +116,6 @@ export const register = (name, email, password) => async (dispatch) => {
     })
   }
 }
-
 export const getUserDetails = (id) => async (dispatch, getState) => {
   try {
     dispatch({
@@ -176,10 +176,12 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
       type: USER_UPDATE_PROFILE_SUCCESS,
       payload: data
     })
+
     dispatch({
       type: USER_LOGIN_SUCCESS,
       payload: data
     })
+
     // Update userInfo in local storage with wishlist data
     const userInfoWithWishlist = { ...data, wishlist: userInfo.wishlist } // Preserve wishlist data
     localStorage.setItem('userInfo', JSON.stringify(userInfoWithWishlist))
