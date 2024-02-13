@@ -47,19 +47,6 @@ const ProductScreen = ({ history, match }) => {
     dispatch(createProductReview(match.params.id, { rating, comment }))
   }
 
-  const addToWishHandler = () => {
-    if (userInfo) {
-      const isInWishlist =
-        userInfo.wishlist && userInfo.wishlist.includes(product._id)
-
-      if (isInWishlist) {
-        dispatch(productRemoveFromWishlist(product._id))
-      } else {
-        dispatch(productAddToWishlist(product._id))
-      }
-    }
-  }
-
   useEffect(() => {
     if (successProductReview) {
       setRating(0)
@@ -69,26 +56,25 @@ const ProductScreen = ({ history, match }) => {
     dispatch({ type: PRODUCT_CREATE_REVIEW_RESET })
   }, [dispatch, match, successProductReview])
 
+  const isInWishlist =
+    userInfo && userInfo.wishlist && userInfo.wishlist.includes(product._id)
+
+  const addToWishHandler = () => {
+    if (userInfo) {
+      if (isInWishlist) {
+        dispatch(productRemoveFromWishlist(product._id))
+      } else {
+        dispatch(productAddToWishlist(product._id))
+      }
+    }
+  }
   return (
     <>
       <Link className="btn btn-dark my-3" to="/">
         Go Home
       </Link>
-      <Button
-        onClick={addToWishHandler}
-        className="btn-block"
-        type="button"
-        disabled={!userInfo || loadingWishlist}
-      >
-        {loadingWishlist ? (
-          <i className="fas fa-spinner fa-spin"></i>
-        ) : userInfo &&
-          userInfo.wishlist &&
-          userInfo.wishlist.includes(product._id) ? (
-          'Remove From Wishlist'
-        ) : (
-          'Add To Wishlist'
-        )}
+      <Button onClick={addToWishHandler} className="btn-block" type="button">
+        {isInWishlist ? 'Remove From Wishlist' : 'Add To Wishlist'}
       </Button>
       {loading ? (
         <Loader />
