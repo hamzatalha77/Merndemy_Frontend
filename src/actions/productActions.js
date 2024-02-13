@@ -28,7 +28,7 @@ import {
   PRODUCT_REMOVE_FROM_WISHLIST_SUCCESS,
   PRODUCT_REMOVE_FROM_WISHLIST_FAIL
 } from '../constants/productConstants'
-import { logout } from './userActions'
+import { logout, updateUserWishlist } from './userActions'
 
 export const listProducts =
   (keyword = '', pageNumber = '') =>
@@ -289,11 +289,17 @@ export const productAddToWishlist =
         }
       }
 
-      await axios.put(`/api/products/wishlist`, { productId }, config)
+      const { data: updatedUserInfo } = await axios.put(
+        `/api/products/wishlist`,
+        { productId },
+        config
+      )
 
       dispatch({
-        type: PRODUCT_ADD_TO_WISHLIST_SUCCESS
+        type: PRODUCT_ADD_TO_WISHLIST_SUCCESS,
+        payload: updatedUserInfo // Update the payload with the updated user information
       })
+      dispatch(updateUserWishlist(updatedUserInfo.wishlist))
     } catch (error) {
       const message =
         error.response && error.response.data.message
@@ -326,11 +332,18 @@ export const productRemoveFromWishlist =
         }
       }
 
-      await axios.put(`/api/products/wishlist`, { productId }, config)
+      const { data: updatedUserInfo } = await axios.put(
+        `/api/products/wishlist`,
+        { productId },
+
+        config
+      )
 
       dispatch({
-        type: PRODUCT_REMOVE_FROM_WISHLIST_SUCCESS
+        type: PRODUCT_REMOVE_FROM_WISHLIST_SUCCESS,
+        payload: updatedUserInfo
       })
+      dispatch(updateUserWishlist(updatedUserInfo.wishlist))
     } catch (error) {
       const message =
         error.response && error.response.data.message

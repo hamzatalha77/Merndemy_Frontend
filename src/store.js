@@ -8,7 +8,8 @@ import {
   productCreateReducer,
   productUpdateReducer,
   productReviewCreateReducer,
-  productTopRatedReducer
+  productTopRatedReducer,
+  productWishlistReducer
 } from './reducers/productReducers.js'
 import { cartReducer } from './reducers/cartReducer'
 import {
@@ -18,8 +19,7 @@ import {
   userUpdateProfileReducer,
   userListReducer,
   userDeleteReducer,
-  userUpdateReducer,
-  productWishlistReducer
+  userUpdateReducer
 } from './reducers/userReducer'
 
 import {

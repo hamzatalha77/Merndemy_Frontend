@@ -25,12 +25,7 @@ import {
   USER_UPDATE_SUCCESS,
   USER_UPDATE_FAIL,
   USER_UPDATE_RESET,
-  PRODUCT_ADD_TO_WISHLIST_REQUEST,
-  PRODUCT_ADD_TO_WISHLIST_SUCCESS,
-  PRODUCT_ADD_TO_WISHLIST_FAIL,
-  PRODUCT_REMOVE_FROM_WISHLIST_REQUEST,
-  PRODUCT_REMOVE_FROM_WISHLIST_SUCCESS,
-  PRODUCT_REMOVE_FROM_WISHLIST_FAIL
+  USER_UPDATE_WISHLIST
 } from '../constants/userConstants'
 
 export const userLoginReducer = (state = {}, action) => {
@@ -48,6 +43,20 @@ export const userLoginReducer = (state = {}, action) => {
       return { loading: false, error: action.payload }
     case USER_LOGOUT:
       return {}
+    default:
+      return state
+  }
+}
+export const userReducer = (state = { userInfo: {} }, action) => {
+  switch (action.type) {
+    case USER_UPDATE_WISHLIST:
+      return {
+        ...state,
+        userInfo: {
+          ...state.userInfo,
+          wishlist: action.payload
+        }
+      }
     default:
       return state
   }
@@ -134,34 +143,6 @@ export const userUpdateProfileReducer = (state = {}, action) => {
       return { loading: false, error: action.payload }
     case USER_UPDATE_PROFILE_RESET:
       return {}
-    default:
-      return state
-  }
-}
-export const productWishlistReducer = (state = {}, action) => {
-  switch (action.type) {
-    case PRODUCT_ADD_TO_WISHLIST_REQUEST:
-      return { ...state, loading: true }
-    case PRODUCT_ADD_TO_WISHLIST_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        success: true,
-        userInfo: action.payload
-      }
-    case PRODUCT_ADD_TO_WISHLIST_FAIL:
-      return { ...state, loading: false, error: action.payload }
-    case PRODUCT_REMOVE_FROM_WISHLIST_REQUEST:
-      return { ...state, loading: true }
-    case PRODUCT_REMOVE_FROM_WISHLIST_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        success: true,
-        userInfo: action.payload
-      }
-    case PRODUCT_REMOVE_FROM_WISHLIST_FAIL:
-      return { ...state, loading: false, error: action.payload }
     default:
       return state
   }

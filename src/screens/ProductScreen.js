@@ -8,14 +8,12 @@ import Message from '../components/Message'
 import Meta from '../components/Meta'
 import {
   listProductDetails,
-  createProductReview
+  createProductReview,
+  productRemoveFromWishlist,
+  productAddToWishlist
 } from '../actions/productActions'
 
 import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants'
-import {
-  productAddToWishlist,
-  productRemoveFromWishlist
-} from '../actions/userActions'
 
 const ProductScreen = ({ history, match }) => {
   const [qty, setQty] = useState(1)
@@ -24,11 +22,11 @@ const ProductScreen = ({ history, match }) => {
 
   const dispatch = useDispatch()
 
-  const productDetails = useSelector((state) => state.productDetails)
-  const { loading, error, product } = productDetails
-
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
+
+  const productDetails = useSelector((state) => state.productDetails)
+  const { loading, error, product } = productDetails
 
   const productReviewCreate = useSelector((state) => state.productReviewCreate)
   const {
@@ -38,11 +36,29 @@ const ProductScreen = ({ history, match }) => {
   } = productReviewCreate
 
   const productWishlist = useSelector((state) => state.productWishlist)
-  const {
-    success: wishSuccess,
-    loading: loadingWish,
-    error: wishError
-  } = productWishlist
+  const { error: errorWish, loading: loadingWishlist } = productWishlist
+
+  const addToCartHandler = () => {
+    history.push(`/cart/${match.params.id}?qty=${qty}`)
+  }
+
+  const submitHandler = (e) => {
+    e.preventDefault()
+    dispatch(createProductReview(match.params.id, { rating, comment }))
+  }
+
+  const addToWishHandler = () => {
+    if (userInfo) {
+      const isInWishlist =
+        userInfo.wishlist && userInfo.wishlist.includes(product._id)
+
+      if (isInWishlist) {
+        dispatch(productRemoveFromWishlist(product._id))
+      } else {
+        dispatch(productAddToWishlist(product._id))
+      }
+    }
+  }
 
   useEffect(() => {
     if (successProductReview) {
@@ -51,46 +67,29 @@ const ProductScreen = ({ history, match }) => {
     }
     dispatch(listProductDetails(match.params.id))
     dispatch({ type: PRODUCT_CREATE_REVIEW_RESET })
-  }, [dispatch, match, successProductReview, history])
-
-  const addToCartHandler = () => {
-    history.push(`/cart/${match.params.id}?qty=${qty}`)
-  }
-  const addToWishHandler = () => {
-    console.log(userInfo)
-    console.log(product._id)
-    console.log(userInfo && userInfo.wishlist)
-    console.log(
-      userInfo && userInfo.wishlist && userInfo.wishlist.includes(product._id)
-    )
-    const isInwishlist =
-      userInfo && userInfo.wishlist && userInfo.wishlist.includes(product._id)
-
-    if (isInwishlist) {
-      dispatch(productRemoveFromWishlist(product._id))
-    } else {
-      dispatch(productAddToWishlist(product._id))
-    }
-  }
-
-  const submitHandler = (e) => {
-    e.preventDefault()
-    dispatch(createProductReview(match.params.id, { rating, comment }))
-  }
+  }, [dispatch, match, successProductReview])
 
   return (
     <>
       <Link className="btn btn-dark my-3" to="/">
         Go Home
       </Link>
-      <Button onClick={addToWishHandler} className="btn-block" type="button">
-        {userInfo &&
-        userInfo.wishlist &&
-        userInfo.wishlist.includes(product._id)
-          ? 'Remove From Wishlist'
-          : 'Add To Wishlist'}
+      <Button
+        onClick={addToWishHandler}
+        className="btn-block"
+        type="button"
+        disabled={!userInfo || loadingWishlist}
+      >
+        {loadingWishlist ? (
+          <i className="fas fa-spinner fa-spin"></i> // Display loading spinner while updating wishlist
+        ) : userInfo &&
+          userInfo.wishlist &&
+          userInfo.wishlist.includes(product._id) ? (
+          'Remove From Wishlist'
+        ) : (
+          'Add To Wishlist'
+        )}
       </Button>
-
       {loading ? (
         <Loader />
       ) : error ? (
@@ -175,8 +174,8 @@ const ProductScreen = ({ history, match }) => {
                     >
                       Add To Card
                     </Button>
-                    {wishError && (
-                      <Message variant="danger">{wishError}</Message>
+                    {errorWish && (
+                      <Message variant="danger">{errorWish}</Message>
                     )}
                   </ListGroup.Item>
                 </ListGroup>

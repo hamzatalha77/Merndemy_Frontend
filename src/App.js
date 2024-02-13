@@ -19,7 +19,7 @@ import ProductListScreen from './screens/ProductListScreen'
 import ProductAddScreen from './screens/ProductAddScreen'
 import ProductEditScreen from './screens/ProductEditScreen'
 import OrderListScreen from './screens/OrderListScreen'
-import ProductsScreen from './screens/ProductsScreen'
+
 // import UpgradeScreen from './screens/UpgradeScreen'
 
 // import UploadProductsScreen from './screens/UploadProductsScreen'
@@ -40,7 +40,6 @@ const App = () => {
 
           <Route path="/product/:id" component={ProductScreen} />
 
-          <Route path="/products/:category" component={ProductsScreen} />
           <Route path="/cart/:id?" component={CartScreen} />
           <Route path="/admin/userList" component={UserListScreen} />
           <Route path="/admin/user/:id/edit" component={UserEditScreen} />

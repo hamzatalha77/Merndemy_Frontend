@@ -142,8 +142,7 @@ export const productWishlistReducer = (state = {}, action) => {
       return {
         ...state,
         loading: false,
-        success: true,
-        userInfo: action.payload
+        success: true
       }
     case PRODUCT_ADD_TO_WISHLIST_FAIL:
       return { ...state, loading: false, error: action.payload }
@@ -153,8 +152,7 @@ export const productWishlistReducer = (state = {}, action) => {
       return {
         ...state,
         loading: false,
-        success: true,
-        userInfo: action.payload
+        success: true
       }
     case PRODUCT_REMOVE_FROM_WISHLIST_FAIL:
       return { ...state, loading: false, error: action.payload }
