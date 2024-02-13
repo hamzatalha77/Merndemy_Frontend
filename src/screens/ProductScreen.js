@@ -81,7 +81,7 @@ const ProductScreen = ({ history, match }) => {
         disabled={!userInfo || loadingWishlist}
       >
         {loadingWishlist ? (
-          <i className="fas fa-spinner fa-spin"></i> // Display loading spinner while updating wishlist
+          <i className="fas fa-spinner fa-spin"></i>
         ) : userInfo &&
           userInfo.wishlist &&
           userInfo.wishlist.includes(product._id) ? (

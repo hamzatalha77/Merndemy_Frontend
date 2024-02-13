@@ -289,7 +289,7 @@ export const productAddToWishlist =
         }
       }
 
-      const { data: updatedUserInfo } = await axios.put(
+      const { data } = await axios.put(
         `/api/products/wishlist`,
         { productId },
         config
@@ -297,23 +297,22 @@ export const productAddToWishlist =
 
       dispatch({
         type: PRODUCT_ADD_TO_WISHLIST_SUCCESS,
-        payload: updatedUserInfo // Update the payload with the updated user information
+        payload: data
       })
-      dispatch(updateUserWishlist(updatedUserInfo.wishlist))
+
+      dispatch(updateUserWishlist(data.wishlist))
     } catch (error) {
       const message =
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message
-      if (message === 'Not authorized, token failed') {
-        dispatch(logout())
-      }
       dispatch({
         type: PRODUCT_ADD_TO_WISHLIST_FAIL,
         payload: message
       })
     }
   }
+
 export const productRemoveFromWishlist =
   (productId) => async (dispatch, getState) => {
     try {
@@ -332,18 +331,18 @@ export const productRemoveFromWishlist =
         }
       }
 
-      const { data: updatedUserInfo } = await axios.put(
+      const { data } = await axios.put(
         `/api/products/wishlist`,
         { productId },
-
         config
       )
 
       dispatch({
         type: PRODUCT_REMOVE_FROM_WISHLIST_SUCCESS,
-        payload: updatedUserInfo
+        payload: data
       })
-      dispatch(updateUserWishlist(updatedUserInfo.wishlist))
+
+      dispatch(updateUserWishlist(data.wishlist))
     } catch (error) {
       const message =
         error.response && error.response.data.message
