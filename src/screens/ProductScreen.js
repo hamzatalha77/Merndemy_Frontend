@@ -72,6 +72,7 @@ const ProductScreen = ({ history, match }) => {
   }, [userInfo, product])
 
   const addToWishHandler = () => {
+    console.log('isInWishlist before toggling:', isInWishlist)
     if (userInfo) {
       if (isInWishlist) {
         dispatch(productRemoveFromWishlist(product._id))
@@ -80,7 +81,9 @@ const ProductScreen = ({ history, match }) => {
       }
       setIsInWishlist(!isInWishlist)
     }
+    console.log('isInWishlist after toggling:', !isInWishlist)
   }
+
   return (
     <>
       <Link className="btn btn-dark my-3" to="/">
@@ -94,8 +97,7 @@ const ProductScreen = ({ history, match }) => {
             size="sm"
             role="status"
             aria-hidden="true"
-          />{' '}
-          {/* Show spinner when loading */}
+          />
           Loading...
         </Button>
       ) : (

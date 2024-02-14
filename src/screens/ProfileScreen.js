@@ -186,24 +186,34 @@ const ProfileScreen = ({ location, history }) => {
         ) : errorWishlist ? (
           <Message variant="danger">{errorWishlist}</Message>
         ) : (
-          <Table striped bordered hover responsive className="table-sm">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                {/* Add more columns as needed */}
-              </tr>
-            </thead>
-            <tbody>
-              {wishlist.map((item) => (
-                <tr key={item._id}>
-                  <td>{item._id}</td>
-                  <td>{item.name}</td>
-                  {/* Add more columns as needed */}
-                </tr>
-              ))}
-            </tbody>
-          </Table>
+          <>
+            {/* <p>{JSON.stringify(wishlist)}</p>
+            <p>
+              {Array.isArray(wishlist.wishlist)
+                ? 'wishlist is an array'
+                : 'wishlist is not an array'}
+            </p> */}
+            {wishlist && wishlist.wishlist && wishlist.wishlist.length > 0 ? (
+              <Table striped bordered hover responsive className="table-sm">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {wishlist.wishlist.map((item) => (
+                    <tr key={item._id}>
+                      <td>{item._id}</td>
+                      <td>{item.name}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            ) : (
+              <Message>No items in your wishlist</Message>
+            )}
+          </>
         )}
       </Col>
     </Row>
