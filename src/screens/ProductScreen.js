@@ -1,7 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap'
+import {
+  Row,
+  Col,
+  Image,
+  ListGroup,
+  Card,
+  Button,
+  Form,
+  Spinner
+} from 'react-bootstrap'
 import Rating from '../components/Rating'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
@@ -19,7 +28,7 @@ const ProductScreen = ({ history, match }) => {
   const [qty, setQty] = useState(1)
   const [rating, setRating] = useState(0)
   const [comment, setComment] = useState('')
-
+  const [isInWishlist, setIsInWishlist] = useState(false)
   const dispatch = useDispatch()
 
   const userLogin = useSelector((state) => state.userLogin)
@@ -56,8 +65,11 @@ const ProductScreen = ({ history, match }) => {
     dispatch({ type: PRODUCT_CREATE_REVIEW_RESET })
   }, [dispatch, match, successProductReview])
 
-  const isInWishlist =
-    userInfo && userInfo.wishlist && userInfo.wishlist.includes(product._id)
+  useEffect(() => {
+    setIsInWishlist(
+      userInfo && userInfo.wishlist && userInfo.wishlist.includes(product._id)
+    ) // Update local state based on userInfo and product
+  }, [userInfo, product])
 
   const addToWishHandler = () => {
     if (userInfo) {
@@ -66,6 +78,7 @@ const ProductScreen = ({ history, match }) => {
       } else {
         dispatch(productAddToWishlist(product._id))
       }
+      setIsInWishlist(!isInWishlist) // Update local state immediately after dispatching the action
     }
   }
   return (
@@ -73,9 +86,23 @@ const ProductScreen = ({ history, match }) => {
       <Link className="btn btn-dark my-3" to="/">
         Go Home
       </Link>
-      <Button onClick={addToWishHandler} className="btn-block" type="button">
-        {isInWishlist ? 'Remove From Wishlist' : 'Add To Wishlist'}
-      </Button>
+      {loadingWishlist ? (
+        <Button className="btn-block" type="button" disabled>
+          <Spinner
+            as="span"
+            animation="border"
+            size="sm"
+            role="status"
+            aria-hidden="true"
+          />{' '}
+          {/* Show spinner when loading */}
+          Loading...
+        </Button>
+      ) : (
+        <Button onClick={addToWishHandler} className="btn-block" type="button">
+          {isInWishlist ? 'Remove From Wishlist' : 'Add To Wishlist'}
+        </Button>
+      )}
       {loading ? (
         <Loader />
       ) : error ? (
