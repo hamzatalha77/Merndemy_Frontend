@@ -68,7 +68,7 @@ const ProductScreen = ({ history, match }) => {
   useEffect(() => {
     setIsInWishlist(
       userInfo && userInfo.wishlist && userInfo.wishlist.includes(product._id)
-    ) // Update local state based on userInfo and product
+    )
   }, [userInfo, product])
 
   const addToWishHandler = () => {
@@ -78,7 +78,7 @@ const ProductScreen = ({ history, match }) => {
       } else {
         dispatch(productAddToWishlist(product._id))
       }
-      setIsInWishlist(!isInWishlist) // Update local state immediately after dispatching the action
+      setIsInWishlist(!isInWishlist)
     }
   }
   return (

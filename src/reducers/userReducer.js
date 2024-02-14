@@ -47,20 +47,7 @@ export const userLoginReducer = (state = {}, action) => {
       return state
   }
 }
-export const userReducer = (state = { userInfo: {} }, action) => {
-  switch (action.type) {
-    case USER_UPDATE_WISHLIST:
-      return {
-        ...state,
-        userInfo: {
-          ...state.userInfo,
-          wishlist: action.payload
-        }
-      }
-    default:
-      return state
-  }
-}
+
 export const userRegisterReducer = (state = {}, action) => {
   switch (action.type) {
     case USER_REGISTER_REQUEST:
@@ -147,17 +134,27 @@ export const userUpdateProfileReducer = (state = {}, action) => {
       return state
   }
 }
-const initialState = {
-  wishlist: []
+export const userReducer = (state = { userInfo: {} }, action) => {
+  switch (action.type) {
+    case USER_UPDATE_WISHLIST:
+      return {
+        ...state,
+        userInfo: {
+          ...state.userInfo,
+          wishlist: action.payload
+        }
+      }
+    default:
+      return state
+  }
 }
-export const userWishlistReducer = (state = initialState, action) => {
+export const userWishlistReducer = (state = { wishlist: [] }, action) => {
   switch (action.type) {
     case USER_UPDATE_WISHLIST:
       return {
         ...state,
         wishlist: action.payload
       }
-    // other cases...
     default:
       return state
   }
