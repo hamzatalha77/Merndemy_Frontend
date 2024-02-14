@@ -4,7 +4,11 @@ import { LinkContainer } from 'react-router-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { getUserDetails, updateUserProfile } from '../actions/userActions'
+import {
+  getUserDetails,
+  updateUserProfile,
+  updateUserWishlist
+} from '../actions/userActions'
 import { listMyOrders } from '../actions/orderActions'
 import { USER_UPDATE_PROFILE_RESET } from '../constants/userConstants'
 
@@ -29,6 +33,13 @@ const ProfileScreen = ({ location, history }) => {
   const orderListMy = useSelector((state) => state.orderListMy)
   const { loading: loadingOrders, error: errorOrders, orders } = orderListMy
 
+  const userWishlist = useSelector((state) => state.userWishlist)
+  const {
+    loading: loadingWishlist,
+    error: errorWishlist,
+    wishlist
+  } = userWishlist
+
   useEffect(() => {
     if (!userInfo) {
       history.push('/login')
@@ -44,6 +55,11 @@ const ProfileScreen = ({ location, history }) => {
     }
   }, [dispatch, history, userInfo, user, success])
 
+  useEffect(() => {
+    if (user && user.wishlist) {
+      dispatch(updateUserWishlist(user.wishlist))
+    }
+  }, [dispatch, user])
   const submitHandler = (e) => {
     e.preventDefault()
     if (password !== confirmPassword) {
@@ -157,6 +173,33 @@ const ProfileScreen = ({ location, history }) => {
                       </Button>
                     </LinkContainer>
                   </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
+      </Col>
+      <Col md={9}>
+        <h2>My Wishlist</h2>
+        {loadingWishlist ? (
+          <Loader />
+        ) : errorWishlist ? (
+          <Message variant="danger">{errorWishlist}</Message>
+        ) : (
+          <Table striped bordered hover responsive className="table-sm">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                {/* Add more columns as needed */}
+              </tr>
+            </thead>
+            <tbody>
+              {wishlist.map((item) => (
+                <tr key={item._id}>
+                  <td>{item._id}</td>
+                  <td>{item.name}</td>
+                  {/* Add more columns as needed */}
                 </tr>
               ))}
             </tbody>

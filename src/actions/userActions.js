@@ -312,15 +312,15 @@ export const updateUserWishlist = (wishlist) => (dispatch, getState) => {
     userLogin: { userInfo }
   } = getState()
 
-  // Update the user's wishlist in userInfo
+  // Update only the wishlist property of userInfo
   const updatedUserInfo = { ...userInfo, wishlist }
 
-  // Update localStorage
+  // Update localStorage with the updated userInfo
   localStorage.setItem('userInfo', JSON.stringify(updatedUserInfo))
 
-  // Dispatch USER_UPDATE_WISHLIST action with the updated wishlist
+  // Dispatch action to update wishlist in Redux store
   dispatch({
     type: USER_UPDATE_WISHLIST,
-    payload: updatedUserInfo
+    payload: wishlist // Pass only the wishlist array as payload
   })
 }

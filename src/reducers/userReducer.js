@@ -147,3 +147,18 @@ export const userUpdateProfileReducer = (state = {}, action) => {
       return state
   }
 }
+const initialState = {
+  wishlist: []
+}
+export const userWishlistReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case USER_UPDATE_WISHLIST:
+      return {
+        ...state,
+        wishlist: action.payload
+      }
+    // other cases...
+    default:
+      return state
+  }
+}
