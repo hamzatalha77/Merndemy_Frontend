@@ -18,7 +18,7 @@ const ProfileScreen = ({ location, history }) => {
   const dispatch = useDispatch()
 
   const userDetails = useSelector((state) => state.userDetails)
-  const { loading, error, user } = userDetails
+  const { loading: loadingUser, error: errorUser, user } = userDetails
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
@@ -36,6 +36,7 @@ const ProfileScreen = ({ location, history }) => {
       dispatch(listMyOrders())
       if (!user || !user.name || success) {
         dispatch({ type: USER_UPDATE_PROFILE_RESET })
+
         dispatch(getUserDetails('profile'))
       } else {
         setName(user.name)
@@ -62,10 +63,10 @@ const ProfileScreen = ({ location, history }) => {
         {message && <Message variant="danger">{message}</Message>}
 
         {success && <Message variant="success">Profile Updated</Message>}
-        {loading ? (
+        {loadingUser ? (
           <Loader />
-        ) : error ? (
-          <Message variant="danger">{error}</Message>
+        ) : errorUser ? (
+          <Message variant="danger">{errorUser}</Message>
         ) : (
           <Form onSubmit={submitHandler}>
             <Form.Group controlId="name">
@@ -165,27 +166,33 @@ const ProfileScreen = ({ location, history }) => {
           </Table>
         )}
       </Col>
-      <Col md={9}>
-        <h2>My Wishlist</h2>
-        {user && user.wishlist && user.wishlist.length > 0 ? (
-          <Table striped bordered hover responsive className="table-sm">
-            <thead>
-              <tr>
-                <th>Name</th>
-              </tr>
-            </thead>
-            <tbody>
-              {user.wishlist.map((item) => (
-                <tr key={item._id}>
-                  <td>{item.name}</td>
+      {loadingUser ? (
+        <Loader />
+      ) : errorUser ? (
+        <Message variant="danger">{errorUser}</Message>
+      ) : (
+        <Col md={9}>
+          <h2>My Wishlist</h2>
+          {user && user.wishlist && user.wishlist.length > 0 ? (
+            <Table striped bordered hover responsive className="table-sm">
+              <thead>
+                <tr>
+                  <th>Name</th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-        ) : (
-          <Message>No items in your wishlist</Message>
-        )}
-      </Col>
+              </thead>
+              <tbody>
+                {user.wishlist.map((item) => (
+                  <tr key={item._id}>
+                    <td>{item.name}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          ) : (
+            <Message>No items in your wishlist</Message>
+          )}
+        </Col>
+      )}
     </Row>
   )
 }
