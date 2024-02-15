@@ -8,9 +8,9 @@ import Paginate from '../components/Paginate'
 import {
   listProducts,
   deleteProduct,
-  createProduct,
-} from '../actions/productActions'
-import { PRODUCT_CREATE_RESET } from '../constants/productConstants'
+  createProduct
+} from '../redux/actions/productActions'
+import { PRODUCT_CREATE_RESET } from '../redux/constants/productConstants'
 
 const ProductListScreen = ({ history, match }) => {
   const pageNumber = match.params.pageNumber || 1
@@ -23,7 +23,7 @@ const ProductListScreen = ({ history, match }) => {
   const {
     loading: loadingDelete,
     error: errorDelete,
-    success: successDelete,
+    success: successDelete
   } = productDelete
 
   const productCreate = useSelector((state) => state.productCreate)
@@ -31,7 +31,7 @@ const ProductListScreen = ({ history, match }) => {
     loading: loadingCreate,
     error: errorCreate,
     success: successCreate,
-    product: createdProduct,
+    product: createdProduct
   } = productCreate
 
   const userLogin = useSelector((state) => state.userLogin)
@@ -55,7 +55,7 @@ const ProductListScreen = ({ history, match }) => {
     successDelete,
     successCreate,
     createdProduct,
-    pageNumber,
+    pageNumber
   ])
 
   const deleteHandler = (id) => {
@@ -110,7 +110,7 @@ const ProductListScreen = ({ history, match }) => {
                       style={{
                         height: '80px',
                         width: '80px',
-                        objectFit: 'cover',
+                        objectFit: 'cover'
                       }}
                     ></img>
                   </td>

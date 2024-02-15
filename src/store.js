@@ -10,8 +10,8 @@ import {
   productReviewCreateReducer,
   productTopRatedReducer,
   productWishlistReducer
-} from './reducers/productReducers.js'
-import { cartReducer } from './reducers/cartReducer'
+} from './redux/reducers/productReducers.js'
+import { cartReducer } from './redux/reducers/cartReducer'
 import {
   userLoginReducer,
   userRegisterReducer,
@@ -21,7 +21,7 @@ import {
   userDeleteReducer,
   userUpdateReducer,
   userWishlistReducer
-} from './reducers/userReducer'
+} from './redux/reducers/userReducer'
 
 import {
   orderCreateReducer,
@@ -30,7 +30,7 @@ import {
   orderListMyReducer,
   orderListReducer,
   orderDeliverReducer
-} from './reducers/orderReducer'
+} from './redux/reducers/orderReducer'
 
 const reducer = combineReducers({
   productList: productListReducer,

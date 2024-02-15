@@ -54,26 +54,6 @@ export const listProducts =
       })
     }
   }
-// export const listProductsCategory = () => async (dispatch) => {
-//   try {
-//     dispatch({ type: PRODUCT_CATEGORY_REQUEST })
-
-//     const { data } = await axios.get(`/api/products?category`)
-
-//     dispatch({
-//       type: PRODUCT_CATEGORY_SUCCESS,
-//       payload: data,
-//     })
-//   } catch (error) {
-//     dispatch({
-//       type: PRODUCT_CATEGORY_FAIL,
-//       payload:
-//         error.response && error.response.data.message
-//           ? error.response.data.message
-//           : error.message,
-//     })
-//   }
-// }
 
 export const listProductDetails = (id) => async (dispatch) => {
   try {

@@ -10,11 +10,11 @@ import {
   getOrderDetails,
   payOrder,
   deliverOrder
-} from '../actions/orderActions'
+} from '../redux/actions/orderActions'
 import {
   ORDER_PAY_RESET,
   ORDER_DELIVER_RESET
-} from '../constants/orderConstants'
+} from '../redux/constants/orderConstants'
 
 const OrderScreen = ({ match, history }) => {
   const orderId = match.params.id
@@ -45,9 +45,6 @@ const OrderScreen = ({ match, history }) => {
     )
   }
 
-  // useEffect(() => {
-  //   dispatch(getOrderDetails(orderId))
-  // }, [])
   useEffect(() => {
     if (!userInfo) {
       history.push('/login')

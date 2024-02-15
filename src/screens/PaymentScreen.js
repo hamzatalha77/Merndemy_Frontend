@@ -3,7 +3,7 @@ import { Form, Button, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import FormContainer from '../components/FormContainer'
 import CheckoutSteps from '../components/CheckoutSteps'
-import { savePaymentMethod } from '../actions/cartActions'
+import { savePaymentMethod } from '../redux/actions/cartActions'
 
 const PaymentScreen = ({ history }) => {
   const cart = useSelector((state) => state.cart)
@@ -39,14 +39,6 @@ const PaymentScreen = ({ history }) => {
               checked
               onChange={(e) => setPaymentMethod(e.target.value)}
             ></Form.Check>
-            {/*  // <Form.Check
-            //   type="radio"
-            //   label="Stripe"
-            //   id="Stripe"
-            //   name="PaymentMethod"
-            //   value="Stripe"
-            //   onChange={(e) => setPaymentMethod(e.target.value)}
-          // ></Form.Check>*/}
           </Col>
         </Form.Group>
         <Button type="submit" variant="primary">

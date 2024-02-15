@@ -16,17 +16,12 @@ import OrderScreen from './screens/OrderScreen'
 import UserListScreen from './screens/UserListScreen'
 import UserEditScreen from './screens/UserEditScreen'
 import ProductListScreen from './screens/ProductListScreen'
-import ProductAddScreen from './screens/ProductAddScreen'
 import ProductEditScreen from './screens/ProductEditScreen'
 import OrderListScreen from './screens/OrderListScreen'
 
-// import UpgradeScreen from './screens/UpgradeScreen'
-
-// import UploadProductsScreen from './screens/UploadProductsScreen'
 const App = () => {
   return (
     <Router>
-      {/* <Route path="/upgrade" component={UpgradeScreen} exact /> */}
       <Header />
       <main className="py-3">
         <Container>
@@ -37,13 +32,10 @@ const App = () => {
           <Route path="/login" component={LoginScreen} />
           <Route path="/register" component={RegisterScreen} />
           <Route path="/profile" component={ProfileScreen} />
-
           <Route path="/product/:id" component={ProductScreen} />
-
           <Route path="/cart/:id?" component={CartScreen} />
           <Route path="/admin/userList" component={UserListScreen} />
           <Route path="/admin/user/:id/edit" component={UserEditScreen} />
-
           <Route
             path="/admin/productlist"
             component={ProductListScreen}
@@ -54,7 +46,6 @@ const App = () => {
             component={ProductListScreen}
             exact
           />
-          <Route path="/admin/product/add" component={ProductAddScreen} />
           <Route path="/admin/product/:id/edit" component={ProductEditScreen} />
           <Route path="/admin/orderlist" component={OrderListScreen} />
           <Route path="/search/:keyword" component={HomeScreen} exact />

@@ -4,7 +4,7 @@ import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import CheckoutSteps from '../components/CheckoutSteps'
-import { createOrder } from '../actions/orderActions'
+import { createOrder } from '../redux/actions/orderActions'
 
 const PlaceOrderScreen = ({ history }) => {
   const dispatch = useDispatch()
@@ -44,7 +44,7 @@ const PlaceOrderScreen = ({ history }) => {
         itemsPrice: cart.itemsPrice,
         taxPrice: cart.taxPrice,
         shippingPrice: cart.shippingPrice,
-        totalPrice: cart.totalPrice,
+        totalPrice: cart.totalPrice
       })
     )
   }

@@ -20,10 +20,10 @@ import {
   createProductReview,
   productRemoveFromWishlist,
   productAddToWishlist
-} from '../actions/productActions'
+} from '../redux/actions/productActions'
 
-import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants'
-import { updateUserWishlist } from '../actions/userActions'
+import { PRODUCT_CREATE_REVIEW_RESET } from '../redux/constants/productConstants'
+import { updateUserWishlist } from '../redux/actions/userActions'
 
 const ProductScreen = ({ history, match }) => {
   const [qty, setQty] = useState(1)
