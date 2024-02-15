@@ -312,13 +312,10 @@ export const updateUserWishlist = (wishlist) => (dispatch, getState) => {
     userLogin: { userInfo }
   } = getState()
 
-  // Update the user's wishlist in userInfo
   const updatedUserInfo = { ...userInfo, wishlist }
 
-  // Update localStorage
   localStorage.setItem('userInfo', JSON.stringify(updatedUserInfo))
 
-  // Dispatch USER_UPDATE_WISHLIST action with the updated wishlist
   dispatch({
     type: USER_UPDATE_WISHLIST,
     payload: updatedUserInfo

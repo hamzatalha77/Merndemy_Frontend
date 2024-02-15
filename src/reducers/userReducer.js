@@ -134,20 +134,6 @@ export const userUpdateProfileReducer = (state = {}, action) => {
       return state
   }
 }
-export const userReducer = (state = { userInfo: {} }, action) => {
-  switch (action.type) {
-    case USER_UPDATE_WISHLIST:
-      return {
-        ...state,
-        userInfo: {
-          ...state.userInfo,
-          wishlist: action.payload
-        }
-      }
-    default:
-      return state
-  }
-}
 export const userWishlistReducer = (state = { wishlist: [] }, action) => {
   switch (action.type) {
     case USER_UPDATE_WISHLIST:

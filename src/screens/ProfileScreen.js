@@ -4,11 +4,7 @@ import { LinkContainer } from 'react-router-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import {
-  getUserDetails,
-  updateUserProfile,
-  updateUserWishlist
-} from '../actions/userActions'
+import { getUserDetails, updateUserProfile } from '../actions/userActions'
 import { listMyOrders } from '../actions/orderActions'
 import { USER_UPDATE_PROFILE_RESET } from '../constants/userConstants'
 
@@ -33,13 +29,6 @@ const ProfileScreen = ({ location, history }) => {
   const orderListMy = useSelector((state) => state.orderListMy)
   const { loading: loadingOrders, error: errorOrders, orders } = orderListMy
 
-  const userWishlist = useSelector((state) => state.userWishlist)
-  const {
-    loading: loadingWishlist,
-    error: errorWishlist,
-    wishlist
-  } = userWishlist
-
   useEffect(() => {
     if (!userInfo) {
       history.push('/login')
@@ -53,13 +42,9 @@ const ProfileScreen = ({ location, history }) => {
         setEmail(user.email)
       }
     }
-  }, [dispatch, history, userInfo, user, success])
+  }, [dispatch, history, userInfo, user, success, user.wishlist])
 
-  useEffect(() => {
-    if (user && user.wishlist) {
-      dispatch(updateUserWishlist(user.wishlist))
-    }
-  }, [dispatch, user])
+  useEffect(() => {}, [dispatch, userInfo])
   const submitHandler = (e) => {
     e.preventDefault()
     if (password !== confirmPassword) {
@@ -68,6 +53,7 @@ const ProfileScreen = ({ location, history }) => {
       dispatch(updateUserProfile({ id: user._id, name, email, password }))
     }
   }
+  console.log('Wishlist:', user.wishlist)
 
   return (
     <Row>
@@ -181,39 +167,23 @@ const ProfileScreen = ({ location, history }) => {
       </Col>
       <Col md={9}>
         <h2>My Wishlist</h2>
-        {loadingWishlist ? (
-          <Loader />
-        ) : errorWishlist ? (
-          <Message variant="danger">{errorWishlist}</Message>
+        {user && user.wishlist && user.wishlist.length > 0 ? (
+          <Table striped bordered hover responsive className="table-sm">
+            <thead>
+              <tr>
+                <th>Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              {user.wishlist.map((item) => (
+                <tr key={item._id}>
+                  <td>{item.name}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
         ) : (
-          <>
-            {/* <p>{JSON.stringify(wishlist)}</p>
-            <p>
-              {Array.isArray(wishlist.wishlist)
-                ? 'wishlist is an array'
-                : 'wishlist is not an array'}
-            </p> */}
-            {wishlist && wishlist.wishlist && wishlist.wishlist.length > 0 ? (
-              <Table striped bordered hover responsive className="table-sm">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {wishlist.wishlist.map((item) => (
-                    <tr key={item._id}>
-                      <td>{item._id}</td>
-                      <td>{item.name}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-            ) : (
-              <Message>No items in your wishlist</Message>
-            )}
-          </>
+          <Message>No items in your wishlist</Message>
         )}
       </Col>
     </Row>

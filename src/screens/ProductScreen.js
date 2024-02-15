@@ -23,6 +23,7 @@ import {
 } from '../actions/productActions'
 
 import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants'
+import { updateUserWishlist } from '../actions/userActions'
 
 const ProductScreen = ({ history, match }) => {
   const [qty, setQty] = useState(1)
@@ -65,14 +66,7 @@ const ProductScreen = ({ history, match }) => {
     dispatch({ type: PRODUCT_CREATE_REVIEW_RESET })
   }, [dispatch, match, successProductReview])
 
-  useEffect(() => {
-    setIsInWishlist(
-      userInfo && userInfo.wishlist && userInfo.wishlist.includes(product._id)
-    )
-  }, [userInfo, product])
-
   const addToWishHandler = () => {
-    console.log('isInWishlist before toggling:', isInWishlist)
     if (userInfo) {
       if (isInWishlist) {
         dispatch(productRemoveFromWishlist(product._id))
@@ -80,9 +74,17 @@ const ProductScreen = ({ history, match }) => {
         dispatch(productAddToWishlist(product._id))
       }
       setIsInWishlist(!isInWishlist)
+
+      
+      dispatch(updateUserWishlist(userInfo.wishlist))
     }
-    console.log('isInWishlist after toggling:', !isInWishlist)
   }
+
+  useEffect(() => {
+    setIsInWishlist(
+      userInfo && userInfo.wishlist && userInfo.wishlist.includes(product._id)
+    )
+  }, [userInfo, product, dispatch])
 
   return (
     <>
