@@ -75,7 +75,6 @@ const ProductScreen = ({ history, match }) => {
       }
       setIsInWishlist(!isInWishlist)
 
-      
       dispatch(updateUserWishlist(userInfo.wishlist))
     }
   }

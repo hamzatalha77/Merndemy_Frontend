@@ -18,7 +18,7 @@ const ProfileScreen = ({ location, history }) => {
   const dispatch = useDispatch()
 
   const userDetails = useSelector((state) => state.userDetails)
-  const { loading: loadingUser, error: errorUser, user } = userDetails
+  const { loading, error, user } = userDetails
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
@@ -36,16 +36,14 @@ const ProfileScreen = ({ location, history }) => {
       dispatch(listMyOrders())
       if (!user || !user.name || success) {
         dispatch({ type: USER_UPDATE_PROFILE_RESET })
-
         dispatch(getUserDetails('profile'))
       } else {
         setName(user.name)
         setEmail(user.email)
       }
     }
-  }, [dispatch, history, userInfo, user, success, user.wishlist])
+  }, [dispatch, history, userInfo, user, success])
 
-  useEffect(() => {}, [dispatch, userInfo])
   const submitHandler = (e) => {
     e.preventDefault()
     if (password !== confirmPassword) {
@@ -54,7 +52,6 @@ const ProfileScreen = ({ location, history }) => {
       dispatch(updateUserProfile({ id: user._id, name, email, password }))
     }
   }
-  console.log('Wishlist:', user.wishlist)
 
   return (
     <Row>
@@ -63,10 +60,10 @@ const ProfileScreen = ({ location, history }) => {
         {message && <Message variant="danger">{message}</Message>}
 
         {success && <Message variant="success">Profile Updated</Message>}
-        {loadingUser ? (
+        {loading ? (
           <Loader />
-        ) : errorUser ? (
-          <Message variant="danger">{errorUser}</Message>
+        ) : error ? (
+          <Message variant="danger">{error}</Message>
         ) : (
           <Form onSubmit={submitHandler}>
             <Form.Group controlId="name">
@@ -166,10 +163,10 @@ const ProfileScreen = ({ location, history }) => {
           </Table>
         )}
       </Col>
-      {loadingUser ? (
+      {loading ? (
         <Loader />
-      ) : errorUser ? (
-        <Message variant="danger">{errorUser}</Message>
+      ) : error ? (
+        <Message variant="danger">{error}</Message>
       ) : (
         <Col md={9}>
           <h2>My Wishlist</h2>
