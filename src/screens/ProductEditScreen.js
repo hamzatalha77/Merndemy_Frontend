@@ -11,6 +11,7 @@ import {
   updateProduct
 } from '../redux/actions/productActions'
 import { PRODUCT_UPDATE_RESET } from '../redux/constants/productConstants'
+import { DEPLOY_URL } from '../constants'
 
 const ProductEditScreen = ({ match, history }) => {
   const productId = match.params.id
@@ -89,7 +90,11 @@ const ProductEditScreen = ({ match, history }) => {
         }
       }
 
-      const { data } = await axios.post('/api/upload', formData, config)
+      const { data } = await axios.post(
+        `${DEPLOY_URL}/api/upload`,
+        formData,
+        config
+      )
 
       console.log(data)
       setImage(data)

@@ -9,7 +9,7 @@ const FileUpload = (props) => {
       header: { 'content-type': 'multipart/form-data' }
     }
     formData.append('file', files[0])
-    Axios.post('/api/products/uploadImage', formData, config).then(
+    Axios.post('${DEPLOY_URL}/api/products/uploadImage', formData, config).then(
       (response) => {
         if (response.data.success) {
           setImages([...Images, response.data.image])
