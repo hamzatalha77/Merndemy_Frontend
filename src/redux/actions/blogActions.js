@@ -5,7 +5,7 @@ import {
   BLOG_CREATE_SUCCESS
 } from '../constants/blogConstants'
 import { logout } from './userActions'
-import { DEPLOY_URL } from '../../constants'
+import { BASE_URL } from '../../constants'
 
 export const createBlog = (blogData) => async (dispatch, getState) => {
   try {
@@ -23,11 +23,7 @@ export const createBlog = (blogData) => async (dispatch, getState) => {
       }
     }
 
-    const { data } = await axios.post(
-      `${DEPLOY_URL}/api/blogs`,
-      blogData,
-      config
-    )
+    const { data } = await axios.post(`${BASE_URL}/api/blogs`, blogData, config)
 
     dispatch({
       type: BLOG_CREATE_SUCCESS,

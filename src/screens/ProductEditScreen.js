@@ -1,4 +1,3 @@
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Form, Button } from 'react-bootstrap'
@@ -11,11 +10,9 @@ import {
   updateProduct
 } from '../redux/actions/productActions'
 import { PRODUCT_UPDATE_RESET } from '../redux/constants/productConstants'
-import { DEPLOY_URL } from '../constants'
 
 const ProductEditScreen = ({ match, history }) => {
   const productId = match.params.id
-  const [files, setFiles] = useState([])
   const [name, setName] = useState('')
   const [price, setPrice] = useState(0)
   const [image, setImage] = useState('')
@@ -23,10 +20,8 @@ const ProductEditScreen = ({ match, history }) => {
   const [categories, setCategories] = useState('')
   const [countInStock, setCountInStock] = useState(0)
   const [description, setDescription] = useState('')
-  const [uploading, setUploading] = useState(false)
 
   const dispatch = useDispatch()
-
   const productDetails = useSelector((state) => state.productDetails)
   const { loading, error, product } = productDetails
 
@@ -71,39 +66,7 @@ const ProductEditScreen = ({ match, history }) => {
       })
     )
   }
-  const uploadFileHandler = async (e) => {
-    const newFiles = []
-    for (let i = 0; i < e.target.files.length; i++) {
-      newFiles.push(e.target.files[i])
-    }
-    const formData = new FormData()
-    for (const key of Object.keys(newFiles)) {
-      formData.append('images', newFiles[key])
-    }
-    setFiles(formData)
-    setUploading(true)
 
-    try {
-      const config = {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }
-
-      const { data } = await axios.post(
-        `${DEPLOY_URL}/api/upload`,
-        formData,
-        config
-      )
-
-      console.log(data)
-      setImage(data)
-      setUploading(false)
-    } catch (error) {
-      console.error(error)
-      setUploading(false)
-    }
-  }
   return (
     <>
       <Link to="/admin/productlist" className="btn btn-dark my-3">
@@ -145,17 +108,6 @@ const ProductEditScreen = ({ match, history }) => {
                 value={image}
                 onChange={(e) => setImage(e.target.value)}
               ></Form.Control>
-              <Form.Group className="mb-3">
-                <Form.Label>Upload File</Form.Label>
-                <Form.Control
-                  type="file"
-                  id="image-file"
-                  custom
-                  onChange={uploadFileHandler}
-                  multiple
-                />
-              </Form.Group>
-              {uploading && <Loader />}
             </Form.Group>
             <Form.Group>
               <Form.Label>Brand</Form.Label>
