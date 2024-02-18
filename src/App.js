@@ -19,6 +19,7 @@ import ProductListScreen from './screens/ProductListScreen'
 import ProductEditScreen from './screens/ProductEditScreen'
 import OrderListScreen from './screens/OrderListScreen'
 import BlogCreateScreen from './screens/BlogCreateScreen'
+import BlogListScreen from './screens/BlogListScreen'
 
 const App = () => {
   return (
@@ -30,7 +31,8 @@ const App = () => {
           <Route path="/shipping" component={ShippingScreen} />
           <Route path="/payment" component={PaymentScreen} />
           <Route path="/placeorder" component={PlaceOrderScreen} />
-          <Route path="/admin/create-blog" component={BlogCreateScreen} />
+          <Route path="/admin/blog/create-blog" component={BlogCreateScreen} />
+          <Route path="/admin/blog-list" component={BlogListScreen} />
           <Route path="/login" component={LoginScreen} />
           <Route path="/register" component={RegisterScreen} />
           <Route path="/profile" component={ProfileScreen} />

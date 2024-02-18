@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Form, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { createBlog } from '../redux/actions/blogActions'
@@ -6,10 +6,13 @@ import axios from 'axios'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 
-const BlogCreateScreen = () => {
+const BlogCreateScreen = ({ history }) => {
   const [title, setTitle] = useState('')
   const [images, setImages] = useState([])
   const dispatch = useDispatch()
+
+  const userLogin = useSelector((state) => state.userLogin)
+  const { userInfo } = userLogin
 
   const blogCreate = useSelector((state) => state.blogCreate)
   const {
@@ -17,6 +20,14 @@ const BlogCreateScreen = () => {
     error: errorCreate,
     success: successCreate
   } = blogCreate
+
+  // useEffect(() => {
+  //   if (userInfo && userInfo.isAdmin) {
+  //     dispatch(blogCreate())
+  //   } else {
+  //     history.push('/login')
+  //   }
+  // }, [dispatch, history, successCreate, userInfo])
 
   const handleImageUpload = async (e) => {
     const files = e.target.files

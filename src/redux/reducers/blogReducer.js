@@ -51,20 +51,27 @@ export const blogDetailsReducer = (state = { blog: {} }, action) => {
   }
 }
 
-export const blogListReducer = (state = { blogs: [] }, action) => {
+export const blogListReducer = (
+  state = { loading: false, error: null, blogs: [] },
+  action
+) => {
   switch (action.type) {
     case BLOG_LIST_REQUEST:
-      return { loading: true }
+      return { ...state, loading: true, error: null }
     case BLOG_LIST_SUCCESS:
-      return { loading: false, blogs: action.payload }
+      const receivedBlogs = Array.isArray(action.payload)
+        ? action.payload
+        : (action.payload && action.payload.blogs) || []
+      return { ...state, loading: false, blogs: receivedBlogs, error: null }
     case BLOG_LIST_FAIL:
-      return { loading: false, error: action.payload }
+      return { ...state, loading: false, error: action.payload }
     case BLOG_LIST_RESET:
-      return { blogs: [] }
+      return { loading: false, error: null, blogs: [] }
     default:
       return state
   }
 }
+
 export const blogDeleteReducer = (state = {}, action) => {
   switch (action.type) {
     case BLOG_DELETE_REQUEST:

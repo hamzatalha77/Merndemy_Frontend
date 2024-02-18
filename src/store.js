@@ -31,7 +31,13 @@ import {
   orderListReducer,
   orderDeliverReducer
 } from './redux/reducers/orderReducer'
-import { blogCreateReducer } from './redux/reducers/blogReducer.js'
+import {
+  blogCreateReducer,
+  blogDeleteReducer,
+  blogDetailsReducer,
+  blogListReducer,
+  blogUpdateReducer
+} from './redux/reducers/blogReducer.js'
 
 const reducer = combineReducers({
   productList: productListReducer,
@@ -57,7 +63,11 @@ const reducer = combineReducers({
   orderDeliver: orderDeliverReducer,
   orderListMy: orderListMyReducer,
   orderList: orderListReducer,
-  blogCreate: blogCreateReducer
+  blogCreate: blogCreateReducer,
+  blogDetails: blogDetailsReducer,
+  blogList: blogListReducer,
+  blogDelete: blogDeleteReducer,
+  blogUpdate: blogUpdateReducer
 })
 
 const cartItemsFromStorage = localStorage.getItem('cartItems')
