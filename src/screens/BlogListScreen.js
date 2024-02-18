@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { LinkContainer } from 'react-router-bootstrap'
-import { Button, Table } from 'react-bootstrap'
+import { Button, Table, Col } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
@@ -31,9 +32,15 @@ const BlogListScreen = ({ history }) => {
       dispatch(deleteBlog(id))
     }
   }
+
   return (
     <>
       <h1>Blogs</h1>
+      <Col className="text-right">
+        <Link to="/admin/blog/create-blog" className="btn btn-black">
+          <i className="fas fa-plus">Create Blog</i>
+        </Link>
+      </Col>
       {loading ? (
         <Loader />
       ) : error ? (
@@ -53,7 +60,7 @@ const BlogListScreen = ({ history }) => {
                 <td>{blog.title} </td>
 
                 <td>
-                  <LinkContainer to={`/admin/blog/create-blog`}>
+                  <LinkContainer to={`/admin/blog/${blog._id}/edit`}>
                     <Button variant="light" className="btn-sm">
                       <i className="fas fa-edit"></i>
                     </Button>

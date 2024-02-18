@@ -20,6 +20,7 @@ import ProductEditScreen from './screens/ProductEditScreen'
 import OrderListScreen from './screens/OrderListScreen'
 import BlogCreateScreen from './screens/BlogCreateScreen'
 import BlogListScreen from './screens/BlogListScreen'
+import BlogEditScreen from './screens/BlogEditScreen'
 
 const App = () => {
   return (
@@ -33,6 +34,7 @@ const App = () => {
           <Route path="/placeorder" component={PlaceOrderScreen} />
           <Route path="/admin/blog/create-blog" component={BlogCreateScreen} />
           <Route path="/admin/blog-list" component={BlogListScreen} />
+          <Route path="/admin/blog/:id/edit" component={BlogEditScreen} />
           <Route path="/login" component={LoginScreen} />
           <Route path="/register" component={RegisterScreen} />
           <Route path="/profile" component={ProfileScreen} />
