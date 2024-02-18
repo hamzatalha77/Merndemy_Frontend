@@ -21,13 +21,12 @@ const BlogCreateScreen = ({ history }) => {
     success: successCreate
   } = blogCreate
 
-  // useEffect(() => {
-  //   if (userInfo && userInfo.isAdmin) {
-  //     dispatch(blogCreate())
-  //   } else {
-  //     history.push('/login')
-  //   }
-  // }, [dispatch, history, successCreate, userInfo])
+  useEffect(() => {
+    if (userInfo && userInfo.isAdmin) {
+    } else {
+      history.push('/login')
+    }
+  }, [dispatch, history, successCreate, userInfo])
 
   const handleImageUpload = async (e) => {
     const files = e.target.files

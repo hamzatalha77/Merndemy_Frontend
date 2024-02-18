@@ -13,7 +13,11 @@ const BlogEditScreen = ({ match, history }) => {
   const blogId = match.params.id
   const [title, setTitle] = useState('')
   const [images, setImages] = useState([])
+  const [newImages, setNewImages] = useState([])
   const dispatch = useDispatch()
+
+  const userLogin = useSelector((state) => state.userLogin)
+  const { userInfo } = userLogin
 
   const blogDetails = useSelector((state) => state.blogDetails)
   const { loading, error, blog } = blogDetails
@@ -26,7 +30,9 @@ const BlogEditScreen = ({ match, history }) => {
   } = blogUpdate
 
   useEffect(() => {
-    if (successUpdate) {
+    if (!userInfo || !userInfo.isAdmin) {
+      history.push('/login')
+    } else if (successUpdate) {
       dispatch({ type: BLOG_UPDATE_RESET })
       history.push('/admin/blog-list')
     } else {
@@ -37,7 +43,7 @@ const BlogEditScreen = ({ match, history }) => {
         setImages(blog.images)
       }
     }
-  }, [dispatch, blogId, blog, successUpdate, history])
+  }, [dispatch, blogId, blog, successUpdate, history, userInfo])
 
   const handleImageUpload = async (e) => {
     const files = e.target.files
@@ -61,15 +67,22 @@ const BlogEditScreen = ({ match, history }) => {
         uploadedImages.push(fileUrl)
       })
 
-      setImages(uploadedImages) // Update images with newly uploaded images only
+      setNewImages([...newImages, ...uploadedImages])
     } catch (error) {
       console.error('Error uploading images:', error)
     }
   }
 
+  const deleteImage = (index) => {
+    const updatedImages = [...images]
+    updatedImages.splice(index, 1)
+    setImages(updatedImages)
+  }
+
   const submitHandler = (e) => {
     e.preventDefault()
-    dispatch(updateBlog({ _id: blogId, title, images }))
+    const updatedImages = [...images, ...newImages]
+    dispatch(updateBlog({ _id: blogId, title, images: updatedImages }))
   }
 
   return (
@@ -78,7 +91,7 @@ const BlogEditScreen = ({ match, history }) => {
         Go Back
       </Link>
       <FormContainer>
-        <h1>Edit User</h1>
+        <h1>Edit Blog</h1>
         {loadingUpdate && <Loader />}
         {errorUpdate && <Message variant="danger">{errorUpdate}</Message>}
         {loading ? (
@@ -87,7 +100,7 @@ const BlogEditScreen = ({ match, history }) => {
           <Message variant="danger">{error}</Message>
         ) : (
           <Form onSubmit={submitHandler}>
-            <Form.Group controlId="Title">
+            <Form.Group controlId="title">
               <Form.Label>Title</Form.Label>
               <Form.Control
                 type="text"
@@ -96,24 +109,33 @@ const BlogEditScreen = ({ match, history }) => {
                 onChange={(e) => setTitle(e.target.value)}
               ></Form.Control>
             </Form.Group>
-            <Row xs={1} md={2} className="g-4">
-              {images.map((image, idx) => (
-                <Col key={idx}>
-                  <Card>
-                    <Card.Img variant="top" src={image} />
-                  </Card>
-                </Col>
-              ))}
-            </Row>
-            <Form.Group controlId="formFileLg" className="mb-3">
-              <Form.Label>Upload Images</Form.Label>
-              <Form.Control
-                type="file"
-                size="lg"
-                multiple
-                onChange={handleImageUpload}
-              />
+
+            <div>
+              <h5>Current Images</h5>
+              <Row xs={2} md={3} lg={4} className="g-4">
+                {images.map((image, index) => (
+                  <Col key={index}>
+                    <Card>
+                      <Card.Img variant="top" src={image} />
+                      <Card.Body>
+                        <Button
+                          variant="danger"
+                          onClick={() => deleteImage(index)}
+                        >
+                          Delete
+                        </Button>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                ))}
+              </Row>
+            </div>
+
+            <Form.Group controlId="newImages">
+              <Form.Label>New Images</Form.Label>
+              <Form.Control type="file" multiple onChange={handleImageUpload} />
             </Form.Group>
+
             <Button type="submit" variant="primary">
               Update
             </Button>
