@@ -10,6 +10,9 @@ import {
   BLOG_DETAILS_REQUEST,
   BLOG_DETAILS_RESET,
   BLOG_DETAILS_SUCCESS,
+  BLOG_LIST_FAIL,
+  BLOG_LIST_REQUEST,
+  BLOG_LIST_SUCCESS,
   BLOG_UPDATE_FAIL,
   BLOG_UPDATE_REQUEST,
   BLOG_UPDATE_SUCCESS
@@ -89,7 +92,42 @@ export const getBlogDetails = (id) => async (dispatch, getState) => {
     })
   }
 }
+export const listBlogs = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: BLOG_LIST_REQUEST
+    })
 
+    const {
+      userLogin: { userInfo }
+    } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`
+      }
+    }
+
+    const { data } = await axios.get(`${BASE_URL}/api/blogs`, config)
+
+    dispatch({
+      type: BLOG_LIST_SUCCESS,
+      payload: data
+    })
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message
+    if (message === 'Not authorized, token failed') {
+      dispatch(logout())
+    }
+    dispatch({
+      type: BLOG_LIST_FAIL,
+      payload: message
+    })
+  }
+}
 export const updateBlog = (blog) => async (dispatch, getState) => {
   try {
     dispatch({

@@ -36,11 +36,7 @@ const Header = () => {
                   <i className="fas fa-shopping-cart"></i>Cart
                 </Nav.Link>
               </LinkContainer>
-              {/* <LinkContainer to="/admin/product/add">
-                <Nav.Link>
-                  <i className="fas fa-add"></i>Add
-                </Nav.Link>
-              </LinkContainer> */}
+
               {userInfo ? (
                 <NavDropdown title={userInfo.name} id="username">
                   <LinkContainer to="/profile">
@@ -68,6 +64,9 @@ const Header = () => {
                   </LinkContainer>
                   <LinkContainer to="/admin/orderlist">
                     <NavDropdown.Item>Orders</NavDropdown.Item>
+                  </LinkContainer>
+                  <LinkContainer to="/admin/create-blog">
+                    <NavDropdown.Item>Blogs</NavDropdown.Item>
                   </LinkContainer>
                 </NavDropdown>
               )}
