@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Form, Button } from 'react-bootstrap'
+import { Form, Button, Image } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { createBlog } from '../redux/actions/blogActions'
 import axios from 'axios'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
+import { BLOG_CREATE_RESET } from '../redux/constants/blogConstants'
 
 const BlogCreateScreen = ({ history }) => {
   const [title, setTitle] = useState('')
@@ -23,6 +24,10 @@ const BlogCreateScreen = ({ history }) => {
 
   useEffect(() => {
     if (userInfo && userInfo.isAdmin) {
+      if (successCreate) {
+        dispatch({ type: BLOG_CREATE_RESET })
+        history.push('/admin/blog-list')
+      }
     } else {
       history.push('/login')
     }
@@ -56,6 +61,12 @@ const BlogCreateScreen = ({ history }) => {
     }
   }
 
+  const removeImage = (index) => {
+    const newImages = [...images]
+    newImages.splice(index, 1)
+    setImages(newImages)
+  }
+
   const submitHandler = (e) => {
     e.preventDefault()
     dispatch(createBlog({ title, images }))
@@ -87,6 +98,26 @@ const BlogCreateScreen = ({ history }) => {
             onChange={handleImageUpload}
           />
         </Form.Group>
+
+        <div>
+          {images.map((image, index) => (
+            <div
+              key={index}
+              style={{ display: 'inline-block', marginRight: '10px' }}
+            >
+              <Image
+                src={image}
+                alt="Uploaded"
+                rounded
+                style={{ width: '100px', height: '100px' }}
+              />
+              <Button variant="danger" onClick={() => removeImage(index)}>
+                Remove
+              </Button>
+            </div>
+          ))}
+        </div>
+
         <Button variant="primary" type="submit">
           Submit
         </Button>
