@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Form, Button, Row, Col } from 'react-bootstrap'
+import { Table, Form, Button, Row, Col, Image } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
@@ -7,14 +7,16 @@ import Loader from '../components/Loader'
 import { getUserDetails, updateUserProfile } from '../redux/actions/userActions'
 import { listMyOrders } from '../redux/actions/orderActions'
 import { USER_UPDATE_PROFILE_RESET } from '../redux/constants/userConstants'
+import axios from 'axios'
 
 const ProfileScreen = ({ location, history }) => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
+  const [avatar, setAvatar] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [message, setMessage] = useState(null)
-
+  const [uploadedAvatar, setUploadedAvatar] = useState('')
   const dispatch = useDispatch()
 
   const userDetails = useSelector((state) => state.userDetails)
@@ -40,16 +42,43 @@ const ProfileScreen = ({ location, history }) => {
       } else {
         setName(user.name)
         setEmail(user.email)
+        setAvatar(user.avatar)
       }
     }
   }, [dispatch, history, userInfo, user, success])
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0]
+    const data = new FormData()
+    data.append('file', file)
+    data.append('upload_preset', 'siiqk1nf')
+
+    try {
+      const res = await axios.post(
+        'https://api.cloudinary.com/v1_1/deenyqw6o/image/upload',
+        data
+      )
+      const fileUrl = res.data.url
+      setUploadedAvatar(fileUrl) // Set the uploaded avatar URL
+    } catch (error) {
+      console.error('Error uploading image:', error)
+    }
+  }
 
   const submitHandler = (e) => {
     e.preventDefault()
     if (password !== confirmPassword) {
       setMessage('Passwords do not match')
     } else {
-      dispatch(updateUserProfile({ id: user._id, name, email, password }))
+      dispatch(
+        updateUserProfile({
+          id: user._id,
+          name,
+          email,
+          password,
+          avatar: uploadedAvatar || avatar // Send the uploaded avatar URL or the existing avatar URL
+        })
+      )
     }
   }
 
@@ -66,6 +95,22 @@ const ProfileScreen = ({ location, history }) => {
           <Message variant="danger">{error}</Message>
         ) : (
           <Form onSubmit={submitHandler}>
+            <Form.Group controlId="avatar">
+              <Form.Label>Avatar</Form.Label>
+              <Col xs={6} md={4}>
+                <Image
+                  src={uploadedAvatar || avatar}
+                  roundedCircle
+                  width={60}
+                  height={60}
+                />
+              </Col>
+              <Form.Control
+                type="file"
+                onChange={handleImageUpload}
+                accept="image/*"
+              />
+            </Form.Group>
             <Form.Group controlId="name">
               <Form.Label>Name</Form.Label>
               <Form.Control
