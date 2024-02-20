@@ -26,7 +26,8 @@ import {
   PRODUCT_ADD_TO_WISHLIST_FAIL,
   PRODUCT_REMOVE_FROM_WISHLIST_REQUEST,
   PRODUCT_REMOVE_FROM_WISHLIST_SUCCESS,
-  PRODUCT_REMOVE_FROM_WISHLIST_FAIL
+  PRODUCT_REMOVE_FROM_WISHLIST_FAIL,
+  PRODUCT_DETAILS_RESET
 } from '../constants/productConstants'
 import { logout, updateUserWishlist } from './userActions'
 import { BASE_URL } from '../../constants'
@@ -113,7 +114,7 @@ export const deleteProduct = (id) => async (dispatch, getState) => {
   }
 }
 
-export const createProduct = () => async (dispatch, getState) => {
+export const createProduct = (productData) => async (dispatch, getState) => {
   try {
     dispatch({
       type: PRODUCT_CREATE_REQUEST
@@ -129,7 +130,11 @@ export const createProduct = () => async (dispatch, getState) => {
       }
     }
 
-    const { data } = await axios.post(`${BASE_URL}/api/products`, {}, config)
+    const { data } = await axios.post(
+      `${BASE_URL}/api/products`,
+      productData,
+      config
+    )
 
     dispatch({
       type: PRODUCT_CREATE_SUCCESS,
@@ -173,11 +178,11 @@ export const updateProduct = (product) => async (dispatch, getState) => {
       config
     )
 
-    dispatch({
-      type: PRODUCT_UPDATE_SUCCESS,
-      payload: data
-    })
+    dispatch({ type: PRODUCT_UPDATE_SUCCESS })
+
     dispatch({ type: PRODUCT_DETAILS_SUCCESS, payload: data })
+
+    dispatch({ type: PRODUCT_DETAILS_RESET })
   } catch (error) {
     const message =
       error.response && error.response.data.message
