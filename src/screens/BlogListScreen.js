@@ -7,7 +7,8 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { deleteBlog, listBlogs } from '../redux/actions/blogActions'
 
-const BlogListScreen = ({ history }) => {
+const BlogListScreen = ({ history, match }) => {
+  const pageNumber = match.params.pageNumber || 1
   const dispatch = useDispatch()
 
   const blogList = useSelector((state) => state.blogList)
@@ -17,15 +18,19 @@ const BlogListScreen = ({ history }) => {
   const { userInfo } = userLogin
 
   const blogDelete = useSelector((state) => state.blogDelete)
-  const { success: successDelete } = blogDelete
+  const {
+    loading: loadingDelete,
+    error: errorDelete,
+    success: successDelete
+  } = blogDelete
 
   useEffect(() => {
     if (userInfo && userInfo.isAdmin) {
-      dispatch(listBlogs())
+      dispatch(listBlogs('', pageNumber))
     } else {
       history.push('/login')
     }
-  }, [dispatch, history, successDelete, userInfo])
+  }, [dispatch, history, successDelete, userInfo, pageNumber])
 
   const deleteHandler = (id) => {
     if (window.confirm('Are you Sure')) {
@@ -41,6 +46,9 @@ const BlogListScreen = ({ history }) => {
           <i className="fas fa-plus">Create Blog</i>
         </Link>
       </Col>
+      {loadingDelete && <Loader />}
+      {errorDelete && <Message variant="danger"> {errorDelete} </Message>}
+
       {loading ? (
         <Loader />
       ) : error ? (

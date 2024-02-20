@@ -7,7 +7,7 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { BLOG_CREATE_RESET } from '../redux/constants/blogConstants'
 
-const BlogCreateScreen = ({ history }) => {
+const BlogCreateScreen = ({ history, match }) => {
   const [title, setTitle] = useState('')
   const [images, setImages] = useState([])
   const dispatch = useDispatch()
@@ -75,7 +75,7 @@ const BlogCreateScreen = ({ history }) => {
   return (
     <>
       {loadingCreate && <Loader />}
-      {errorCreate && <Message variant="danger">{errorCreate}</Message>}{' '}
+      {errorCreate && <Message variant="danger">{errorCreate}</Message>}
       {successCreate && (
         <Message variant="success">Blog created successfully</Message>
       )}

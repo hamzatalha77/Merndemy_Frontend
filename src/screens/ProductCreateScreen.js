@@ -1,68 +1,90 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Form, Button } from 'react-bootstrap'
+import { Form, Button, Image } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import FormContainer from '../components/FormContainer'
-import {
-  listProductDetails,
-  updateProduct
-} from '../redux/actions/productActions'
-import { PRODUCT_UPDATE_RESET } from '../redux/constants/productConstants'
+import { createProduct } from '../redux/actions/productActions'
+import axios from 'axios'
+import { PRODUCT_CREATE_RESET } from '../redux/constants/productConstants'
 
-const ProductCreateScreen = ({ match, history }) => {
-  const productId = match.params.id
+const ProductCreateScreen = ({ history }) => {
   const [name, setName] = useState('')
   const [price, setPrice] = useState(0)
-  const [image, setImage] = useState('')
+  const [images, setImages] = useState([])
   const [brand, setBrand] = useState('')
   const [categories, setCategories] = useState('')
   const [countInStock, setCountInStock] = useState(0)
   const [description, setDescription] = useState('')
 
   const dispatch = useDispatch()
-  const productDetails = useSelector((state) => state.productDetails)
-  const { loading, error, product } = productDetails
+  const userLogin = useSelector((state) => state.userLogin)
+  const { userInfo } = userLogin
 
-  const productUpdate = useSelector((state) => state.productUpdate)
+  const productCreate = useSelector((state) => state.productCreate)
   const {
-    loading: loadingUpdate,
-    error: errorUpdate,
-    success: successUpdate
-  } = productUpdate
+    loading: loadingCreate,
+    error: errorCreate,
+    success: successCreate
+  } = productCreate
 
   useEffect(() => {
-    if (successUpdate) {
-      dispatch({ type: PRODUCT_UPDATE_RESET })
-      history.push('/admin/productlist')
-    } else {
-      if (!product.name || product._id !== productId) {
-        dispatch(listProductDetails(productId))
-      } else {
-        setName(product.name)
-        setPrice(product.price)
-        setImage(product.image)
-        setBrand(product.brand)
-        setCategories(product.categories)
-        setCountInStock(product.countInStock)
-        setDescription(product.description)
+    if (userInfo && userInfo.isAdmin) {
+      if (successCreate) {
+        dispatch({ type: PRODUCT_CREATE_RESET })
+        history.push('/admin/productlist')
       }
+    } else {
+      history.push('/login')
     }
-  }, [dispatch, history, productId, product, successUpdate])
+  }, [dispatch, history, successCreate, userInfo])
+
+  const handleImageUpload = async (e) => {
+    const files = e.target.files
+    const uploadedImages = []
+
+    const uploaders = Array.from(files).map((file) => {
+      const data = new FormData()
+      data.append('file', file)
+      data.append('upload_preset', 'siiqk1nf')
+
+      return axios.post(
+        'https://api.cloudinary.com/v1_1/deenyqw6o/image/upload',
+        data
+      )
+    })
+
+    try {
+      const responses = await Promise.all(uploaders)
+      responses.forEach((res) => {
+        const fileUrl = res.data.url
+        uploadedImages.push(fileUrl)
+      })
+
+      setImages([...images, ...uploadedImages])
+    } catch (error) {
+      console.error('Error uploading images:', error)
+    }
+  }
+
+  const removeImage = (index) => {
+    const newImages = [...images]
+    newImages.splice(index, 1)
+    setImages(newImages)
+  }
 
   const submitHandler = (e) => {
     e.preventDefault()
     dispatch(
-      updateProduct({
-        _id: productId,
+      createProduct({
         name,
+        images,
         price,
-        image,
+        description,
         brand,
         categories,
-        countInStock,
-        description
+        countInStock
       })
     )
   }
@@ -74,83 +96,97 @@ const ProductCreateScreen = ({ match, history }) => {
       </Link>
       <FormContainer>
         <h1>Edit Product</h1>
-        {loadingUpdate && <Loader></Loader>}
-        {errorUpdate && <Message variant="danger"> {errorUpdate} </Message>}
-        {loading ? (
-          <Loader />
-        ) : error ? (
-          <Message variant="danger">{error}</Message>
-        ) : (
-          <Form onSubmit={submitHandler}>
-            <Form.Group>
-              <Form.Label>Product Name</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Price</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder="Enter Price"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Image:</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter image url"
-                value={image}
-                onChange={(e) => setImage(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Brand</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter Brand"
-                value={brand}
-                onChange={(e) => setBrand(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Count </Form.Label>
-              <Form.Control
-                type="number"
-                placeholder="Enter Count in Stock"
-                value={countInStock}
-                onChange={(e) => setCountInStock(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Category</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter category"
-                value={categories}
-                onChange={(e) => setCategories(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
+        {loadingCreate && <Loader></Loader>}
+        {errorCreate && <Message variant="danger"> {errorCreate} </Message>}
 
-            <Button type="submit" variant="primary">
-              Updates
-            </Button>
-          </Form>
-        )}
+        <Form onSubmit={submitHandler}>
+          <Form.Group>
+            <Form.Label>Product Name</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            ></Form.Control>
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Price</Form.Label>
+            <Form.Control
+              type="number"
+              placeholder="Enter Price"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+            ></Form.Control>
+          </Form.Group>
+          <Form.Group controlId="formFileLg" className="mb-3">
+            <Form.Label>Upload Images</Form.Label>
+            <Form.Control
+              type="file"
+              size="lg"
+              multiple
+              onChange={handleImageUpload}
+            />
+          </Form.Group>
+
+          <Form.Group>
+            {images.map((image, index) => (
+              <div
+                key={index}
+                style={{ display: 'inline-block', marginRight: '10px' }}
+              >
+                <Image
+                  src={image}
+                  alt="Uploaded"
+                  rounded
+                  style={{ width: '100px', height: '100px' }}
+                />
+                <Button variant="danger" onClick={() => removeImage(index)}>
+                  Remove
+                </Button>
+              </div>
+            ))}
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Brand</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter Brand"
+              value={brand}
+              onChange={(e) => setBrand(e.target.value)}
+            ></Form.Control>
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Count </Form.Label>
+            <Form.Control
+              type="number"
+              placeholder="Enter Count in Stock"
+              value={countInStock}
+              onChange={(e) => setCountInStock(e.target.value)}
+            ></Form.Control>
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Category</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter category"
+              value={categories}
+              onChange={(e) => setCategories(e.target.value)}
+            ></Form.Control>
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Description</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            ></Form.Control>
+          </Form.Group>
+
+          <Button type="submit" variant="primary">
+            Add New
+          </Button>
+        </Form>
       </FormContainer>
     </>
   )

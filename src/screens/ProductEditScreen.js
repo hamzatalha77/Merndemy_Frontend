@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Form, Button } from 'react-bootstrap'
+import { Form, Button, Row, Col, Card } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
@@ -10,18 +10,23 @@ import {
   updateProduct
 } from '../redux/actions/productActions'
 import { PRODUCT_UPDATE_RESET } from '../redux/constants/productConstants'
-
+import axios from 'axios'
 const ProductEditScreen = ({ match, history }) => {
   const productId = match.params.id
   const [name, setName] = useState('')
   const [price, setPrice] = useState(0)
-  const [image, setImage] = useState('')
+  const [images, setImages] = useState([])
+  const [newImages, setNewImages] = useState([])
   const [brand, setBrand] = useState('')
   const [categories, setCategories] = useState('')
   const [countInStock, setCountInStock] = useState(0)
   const [description, setDescription] = useState('')
 
   const dispatch = useDispatch()
+
+  const userLogin = useSelector((state) => state.userLogin)
+  const { userInfo } = userLogin
+
   const productDetails = useSelector((state) => state.productDetails)
   const { loading, error, product } = productDetails
 
@@ -33,7 +38,9 @@ const ProductEditScreen = ({ match, history }) => {
   } = productUpdate
 
   useEffect(() => {
-    if (successUpdate) {
+    if (!userInfo || !userInfo.isAdmin) {
+      history.push('/login')
+    } else if (successUpdate) {
       dispatch({ type: PRODUCT_UPDATE_RESET })
       history.push('/admin/productlist')
     } else {
@@ -42,27 +49,62 @@ const ProductEditScreen = ({ match, history }) => {
       } else {
         setName(product.name)
         setPrice(product.price)
-        setImage(product.image)
+        setImages(product.images)
         setBrand(product.brand)
         setCategories(product.categories)
         setCountInStock(product.countInStock)
         setDescription(product.description)
       }
     }
-  }, [dispatch, history, productId, product, successUpdate])
+  }, [dispatch, history, productId, product, successUpdate, userInfo])
+
+  const handleImageUpload = async (e) => {
+    const files = e.target.files
+    const uploadedImages = []
+
+    const uploaders = Array.from(files).map((file) => {
+      const data = new FormData()
+      data.append('file', file)
+      data.append('upload_preset', 'siiqk1nf')
+
+      return axios.post(
+        'https://api.cloudinary.com/v1_1/deenyqw6o/image/upload',
+        data
+      )
+    })
+
+    try {
+      const responses = await Promise.all(uploaders)
+      responses.forEach((res) => {
+        const fileUrl = res.data.url
+        uploadedImages.push(fileUrl)
+      })
+
+      setNewImages([...newImages, ...uploadedImages])
+    } catch (error) {
+      console.error('Error uploading images:', error)
+    }
+  }
+
+  const deleteImage = (index) => {
+    const updatedImages = [...images]
+    updatedImages.splice(index, 1)
+    setImages(updatedImages)
+  }
 
   const submitHandler = (e) => {
     e.preventDefault()
+    const updatedImages = [...images, ...newImages]
     dispatch(
       updateProduct({
         _id: productId,
         name,
+        images: updatedImages,
         price,
-        image,
+        description,
         brand,
         categories,
-        countInStock,
-        description
+        countInStock
       })
     )
   }
@@ -100,14 +142,30 @@ const ProductEditScreen = ({ match, history }) => {
                 onChange={(e) => setPrice(e.target.value)}
               ></Form.Control>
             </Form.Group>
-            <Form.Group>
-              <Form.Label>Image:</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter image url"
-                value={image}
-                onChange={(e) => setImage(e.target.value)}
-              ></Form.Control>
+            <div>
+              <h5>Current Images</h5>
+              <Row xs={2} md={3} lg={4} className="g-4">
+                {images.map((image, index) => (
+                  <Col key={index}>
+                    <Card>
+                      <Card.Img variant="top" src={image} />
+                      <Card.Body>
+                        <Button
+                          variant="danger"
+                          onClick={() => deleteImage(index)}
+                        >
+                          Delete
+                        </Button>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                ))}
+              </Row>
+            </div>
+
+            <Form.Group controlId="newImages">
+              <Form.Label>New Images</Form.Label>
+              <Form.Control type="file" multiple onChange={handleImageUpload} />
             </Form.Group>
             <Form.Group>
               <Form.Label>Brand</Form.Label>
