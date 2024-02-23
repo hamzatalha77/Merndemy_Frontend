@@ -33,14 +33,18 @@ import { logout, updateUserWishlist } from './userActions'
 import { BASE_URL } from '../../constants'
 
 export const listProducts =
-  (keyword = '', pageNumber = '') =>
+  (keyword = '', pageNumber = '', category = '') =>
   async (dispatch) => {
     try {
       dispatch({ type: PRODUCT_LIST_REQUEST })
 
-      const { data } = await axios.get(
-        `${BASE_URL}/api/products?keyword=${keyword}&pageNumber=${pageNumber}`
-      )
+      let url = `${BASE_URL}/api/products?keyword=${keyword}&pageNumber=${pageNumber}`
+
+      if (category) {
+        url += `&cat=${category}`
+      }
+
+      const { data } = await axios.get(url)
 
       dispatch({
         type: PRODUCT_LIST_SUCCESS,

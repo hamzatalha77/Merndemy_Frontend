@@ -38,6 +38,7 @@ import {
   blogListReducer,
   blogUpdateReducer
 } from './redux/reducers/blogReducer.js'
+import { categoryListReducer } from './redux/reducers/categoryReducer.js'
 
 const reducer = combineReducers({
   productList: productListReducer,
@@ -67,7 +68,8 @@ const reducer = combineReducers({
   blogDetails: blogDetailsReducer,
   blogList: blogListReducer,
   blogDelete: blogDeleteReducer,
-  blogUpdate: blogUpdateReducer
+  blogUpdate: blogUpdateReducer,
+  categoryList: categoryListReducer
 })
 
 const cartItemsFromStorage = localStorage.getItem('cartItems')

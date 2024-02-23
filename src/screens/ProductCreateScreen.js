@@ -8,13 +8,14 @@ import FormContainer from '../components/FormContainer'
 import { createProduct } from '../redux/actions/productActions'
 import axios from 'axios'
 import { PRODUCT_CREATE_RESET } from '../redux/constants/productConstants'
+import { listCategories } from '../redux/actions/categoryActions'
 
 const ProductCreateScreen = ({ history }) => {
   const [name, setName] = useState('')
   const [price, setPrice] = useState(0)
   const [images, setImages] = useState([])
   const [brand, setBrand] = useState('')
-  const [categories, setCategories] = useState('')
+  const [category, setCategory] = useState('')
   const [countInStock, setCountInStock] = useState(0)
   const [description, setDescription] = useState('')
 
@@ -29,8 +30,12 @@ const ProductCreateScreen = ({ history }) => {
     success: successCreate
   } = productCreate
 
+  const categoryList = useSelector((state) => state.categoryList)
+  const { loading: loadingCategory, error: errorCategory } = categoryList
+
   useEffect(() => {
     if (userInfo && userInfo.isAdmin) {
+      dispatch(listCategories())
       if (successCreate) {
         dispatch({ type: PRODUCT_CREATE_RESET })
         history.push('/admin/productlist')
@@ -83,7 +88,7 @@ const ProductCreateScreen = ({ history }) => {
         price,
         description,
         brand,
-        categories,
+        category,
         countInStock
       })
     )
@@ -95,7 +100,7 @@ const ProductCreateScreen = ({ history }) => {
         Go Back
       </Link>
       <FormContainer>
-        <h1>Edit Product</h1>
+        <h1>Create Product</h1>
         {loadingCreate && <Loader></Loader>}
         {errorCreate && <Message variant="danger"> {errorCreate} </Message>}
 
@@ -118,6 +123,24 @@ const ProductCreateScreen = ({ history }) => {
               onChange={(e) => setPrice(e.target.value)}
             ></Form.Control>
           </Form.Group>
+          {loadingCategory && <Loader></Loader>}
+          {errorCategory && (
+            <Message variant="danger"> {errorCategory} </Message>
+          )}
+          <Form.Group>
+            <Form.Label>Category</Form.Label>
+            <Form.Select
+              aria-label="Default select example"
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              {categoryList.categories.map((cat) => (
+                <option key={cat._id} value={cat._id}>
+                  {cat.name}
+                </option>
+              ))}
+            </Form.Select>
+          </Form.Group>
+
           <Form.Group controlId="formFileLg" className="mb-3">
             <Form.Label>Upload Images</Form.Label>
             <Form.Control
@@ -164,15 +187,7 @@ const ProductCreateScreen = ({ history }) => {
               onChange={(e) => setCountInStock(e.target.value)}
             ></Form.Control>
           </Form.Group>
-          <Form.Group>
-            <Form.Label>Category</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter category"
-              value={categories}
-              onChange={(e) => setCategories(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
+
           <Form.Group>
             <Form.Label>Description</Form.Label>
             <Form.Control
