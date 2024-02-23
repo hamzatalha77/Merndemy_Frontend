@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   Row,
   Col,
-  Image,
   ListGroup,
   Card,
   Button,
@@ -21,9 +20,11 @@ import {
   productRemoveFromWishlist,
   productAddToWishlist
 } from '../redux/actions/productActions'
-
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Navigation, Thumbs } from 'swiper/modules'
 import { PRODUCT_CREATE_REVIEW_RESET } from '../redux/constants/productConstants'
 import { updateUserWishlist } from '../redux/actions/userActions'
+import 'swiper/swiper-bundle.css'
 
 const ProductScreen = ({ history, match }) => {
   const [qty, setQty] = useState(1)
@@ -31,7 +32,7 @@ const ProductScreen = ({ history, match }) => {
   const [comment, setComment] = useState('')
   const [isInWishlist, setIsInWishlist] = useState(false)
   const dispatch = useDispatch()
-
+  const [activeThumb, setActiveThumb] = useState()
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
 
@@ -115,7 +116,37 @@ const ProductScreen = ({ history, match }) => {
           <Meta title={product.name} />
           <Row>
             <Col md={6}>
-              <Image src={product.image} alt={product.name} fluid></Image>
+              <Swiper
+                loop={true}
+                spaceBetween={10}
+                navigation={true}
+                modules={[Navigation, Thumbs]}
+                grabCursor={true}
+                thumbs={{ swiper: activeThumb }}
+                className="product-images-slider"
+              >
+                {product.images?.map((item, index) => (
+                  <SwiperSlide key={index}>
+                    <img src={item} alt="product images" />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+              <Swiper
+                onSwiper={setActiveThumb}
+                loop={true}
+                spaceBetween={10}
+                slidesPerView={4}
+                modules={[Navigation, Thumbs]}
+                className="product-images-slider-thumbs"
+              >
+                {product.images?.map((item, index) => (
+                  <SwiperSlide key={index}>
+                    <div className="product-images-slider-thumbs-wrapper">
+                      <img src={item} alt="product images" />
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
             </Col>
             <Col md={3}>
               <ListGroup variant="flush">
