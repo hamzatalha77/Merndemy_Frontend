@@ -20,9 +20,9 @@ import {
   productRemoveFromWishlist,
   productAddToWishlist
 } from '../redux/actions/productActions'
-
 import { PRODUCT_CREATE_REVIEW_RESET } from '../redux/constants/productConstants'
 import { updateUserWishlist } from '../redux/actions/userActions'
+import ImageCarousel from '../components/ImageCarousel'
 
 const ProductScreen = ({ history, match }) => {
   const [qty, setQty] = useState(1)
@@ -57,7 +57,7 @@ const ProductScreen = ({ history, match }) => {
     e.preventDefault()
     dispatch(createProductReview(match.params.id, { rating, comment }))
   }
-  console.log(product.images)
+
   useEffect(() => {
     if (successProductReview) {
       setRating(0)
@@ -115,7 +115,13 @@ const ProductScreen = ({ history, match }) => {
         <>
           <Meta title={product.name} />
           <Row>
-            <Col md={6}></Col>
+            <Col md={6}>
+              {product.images && product.images.length > 0 ? (
+                <ImageCarousel images={product.images} />
+              ) : (
+                <Message variant="info">No images available</Message>
+              )}
+            </Col>
             <Col md={3}>
               <ListGroup variant="flush">
                 <ListGroup.Item>
