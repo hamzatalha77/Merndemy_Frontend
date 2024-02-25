@@ -17,6 +17,7 @@ const ProfileScreen = ({ location, history }) => {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [message, setMessage] = useState(null)
   const [uploadedAvatar, setUploadedAvatar] = useState('')
+
   const dispatch = useDispatch()
 
   const userDetails = useSelector((state) => state.userDetails)
@@ -59,7 +60,7 @@ const ProfileScreen = ({ location, history }) => {
         data
       )
       const fileUrl = res.data.url
-      setUploadedAvatar(fileUrl) // Set the uploaded avatar URL
+      setUploadedAvatar(fileUrl)
     } catch (error) {
       console.error('Error uploading image:', error)
     }
@@ -76,7 +77,7 @@ const ProfileScreen = ({ location, history }) => {
           name,
           email,
           password,
-          avatar: uploadedAvatar || avatar // Send the uploaded avatar URL or the existing avatar URL
+          avatar: uploadedAvatar || avatar
         })
       )
     }
