@@ -76,15 +76,17 @@ const ProductListScreen = ({ history, match }) => {
               {products.map((product) => (
                 <tr key={product._id}>
                   <td>
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      style={{
-                        height: '80px',
-                        width: '80px',
-                        objectFit: 'cover'
-                      }}
-                    ></img>
+                    <Link to={`/product/${product._id}`}>
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        style={{
+                          height: '80px',
+                          width: '80px',
+                          objectFit: 'cover'
+                        }}
+                      ></img>
+                    </Link>
                   </td>
 
                   <td>{product._id} </td>
