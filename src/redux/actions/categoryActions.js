@@ -7,25 +7,14 @@ import {
 import { DEPLOY_URL } from '../../constants'
 import { logout } from './userActions'
 
-export const listCategories = () => async (dispatch, getState) => {
+export const listCategories = () => async (dispatch) => {
   try {
     dispatch({
       type: CATEGORY_LIST_REQUEST
     })
 
-    const {
-      userLogin: { userInfo }
-    } = getState()
-
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.token}`
-      }
-    }
-
     const { data } = await axios.get(
-      `${DEPLOY_URL}/api/categories/category/all`,
-      config
+      `${DEPLOY_URL}/api/categories/category/all`
     )
 
     dispatch({
