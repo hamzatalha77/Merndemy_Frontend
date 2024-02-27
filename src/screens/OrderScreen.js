@@ -15,7 +15,7 @@ import {
   ORDER_PAY_RESET,
   ORDER_DELIVER_RESET
 } from '../redux/constants/orderConstants'
-import { BASE_URL } from '../constants'
+import { DEPLOY_URL } from '../constants'
 
 const OrderScreen = ({ match, history }) => {
   const orderId = match.params.id
@@ -52,7 +52,7 @@ const OrderScreen = ({ match, history }) => {
     }
     const addPayPalScript = async () => {
       const { data: clientId } = await axios.get(
-        `${BASE_URL}/api/config/paypal`
+        `${DEPLOY_URL}/api/config/paypal`
       )
       const script = document.createElement('script')
       script.type = 'text/javascript'

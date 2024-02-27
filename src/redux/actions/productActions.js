@@ -30,7 +30,7 @@ import {
   PRODUCT_DETAILS_RESET
 } from '../constants/productConstants'
 import { logout, updateUserWishlist } from './userActions'
-import { BASE_URL } from '../../constants'
+import { DEPLOY_URL } from '../../constants'
 
 export const listProducts =
   (keyword = '', pageNumber = '', category = '') =>
@@ -38,7 +38,7 @@ export const listProducts =
     try {
       dispatch({ type: PRODUCT_LIST_REQUEST })
 
-      let url = `${BASE_URL}/api/products?keyword=${keyword}&pageNumber=${pageNumber}`
+      let url = `${DEPLOY_URL}/api/products?keyword=${keyword}&pageNumber=${pageNumber}`
 
       if (category) {
         url += `&cat=${category}`
@@ -65,7 +65,7 @@ export const listProductDetails = (id) => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_DETAILS_REQUEST })
 
-    const { data } = await axios.get(`${BASE_URL}/api/products/${id}`)
+    const { data } = await axios.get(`${DEPLOY_URL}/api/products/${id}`)
 
     dispatch({
       type: PRODUCT_DETAILS_SUCCESS,
@@ -98,7 +98,7 @@ export const deleteProduct = (id) => async (dispatch, getState) => {
       }
     }
 
-    await axios.delete(`${BASE_URL}/api/products/${id}`, config)
+    await axios.delete(`${DEPLOY_URL}/api/products/${id}`, config)
 
     dispatch({
       type: PRODUCT_DELETE_SUCCESS
@@ -135,7 +135,7 @@ export const createProduct = (productData) => async (dispatch, getState) => {
     }
 
     const { data } = await axios.post(
-      `${BASE_URL}/api/products`,
+      `${DEPLOY_URL}/api/products`,
       productData,
       config
     )
@@ -177,7 +177,7 @@ export const updateProduct = (product) => async (dispatch, getState) => {
     }
 
     const { data } = await axios.put(
-      `${BASE_URL}/api/products/${product._id}`,
+      `${DEPLOY_URL}/api/products/${product._id}`,
       product,
       config
     )
@@ -221,7 +221,7 @@ export const createProductReview =
       }
 
       await axios.post(
-        `${BASE_URL}/api/products/${productId}/reviews`,
+        `${DEPLOY_URL}/api/products/${productId}/reviews`,
         review,
         config
       )
@@ -248,7 +248,7 @@ export const listTopProducts = () => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_TOP_REQUEST })
 
-    const { data } = await axios.get(`${BASE_URL}/api/products/top`)
+    const { data } = await axios.get(`${DEPLOY_URL}/api/products/top`)
 
     dispatch({
       type: PRODUCT_TOP_SUCCESS,
@@ -284,7 +284,7 @@ export const productAddToWishlist =
       }
 
       const { data } = await axios.put(
-        `${BASE_URL}/api/products/wishlist`,
+        `${DEPLOY_URL}/api/products/wishlist`,
         { productId },
         config
       )
@@ -326,7 +326,7 @@ export const productRemoveFromWishlist =
       }
 
       const { data } = await axios.put(
-        `${BASE_URL}/api/products/wishlist`,
+        `${DEPLOY_URL}/api/products/wishlist`,
         { productId },
         config
       )

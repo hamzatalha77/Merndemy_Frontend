@@ -4,7 +4,7 @@ import {
   CATEGORY_LIST_REQUEST,
   CATEGORY_LIST_SUCCESS
 } from '../constants/categoryConstants'
-import { BASE_URL } from '../../constants'
+import { DEPLOY_URL } from '../../constants'
 import { logout } from './userActions'
 
 export const listCategories = () => async (dispatch, getState) => {
@@ -24,7 +24,7 @@ export const listCategories = () => async (dispatch, getState) => {
     }
 
     const { data } = await axios.get(
-      `${BASE_URL}/api/categories/category/all`,
+      `${DEPLOY_URL}/api/categories/category/all`,
       config
     )
 
