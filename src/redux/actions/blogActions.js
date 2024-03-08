@@ -18,7 +18,7 @@ import {
   BLOG_UPDATE_SUCCESS
 } from '../constants/blogConstants'
 import { logout } from './userActions'
-import { DEPLOY_URL } from '../../constants'
+import { BASE_URL } from '../../constants'
 
 export const createBlog = (blogData) => async (dispatch, getState) => {
   try {
@@ -36,11 +36,7 @@ export const createBlog = (blogData) => async (dispatch, getState) => {
       }
     }
 
-    const { data } = await axios.post(
-      `${DEPLOY_URL}/api/blogs`,
-      blogData,
-      config
-    )
+    const { data } = await axios.post(`${BASE_URL}/api/blogs`, blogData, config)
 
     dispatch({
       type: BLOG_CREATE_SUCCESS,
@@ -76,7 +72,7 @@ export const getBlogDetails = (id) => async (dispatch, getState) => {
       }
     }
 
-    const { data } = await axios.get(`${DEPLOY_URL}/api/blogs/${id}`, config)
+    const { data } = await axios.get(`${BASE_URL}/api/blogs/${id}`, config)
 
     dispatch({
       type: BLOG_DETAILS_SUCCESS,
@@ -112,7 +108,7 @@ export const listBlogs = () => async (dispatch, getState) => {
       }
     }
 
-    const { data } = await axios.get(`${DEPLOY_URL}/api/blogs`, config)
+    const { data } = await axios.get(`${BASE_URL}/api/blogs`, config)
 
     dispatch({
       type: BLOG_LIST_SUCCESS,
@@ -150,7 +146,7 @@ export const updateBlog = (blog) => async (dispatch, getState) => {
     }
 
     const { data } = await axios.put(
-      `${DEPLOY_URL}/api/blogs/${blog._id}`,
+      `${BASE_URL}/api/blogs/${blog._id}`,
       blog,
       config
     )
@@ -190,7 +186,7 @@ export const deleteBlog = (id) => async (dispatch, getState) => {
       }
     }
 
-    await axios.delete(`${DEPLOY_URL}/api/blogs/${id}`, config)
+    await axios.delete(`${BASE_URL}/api/blogs/${id}`, config)
 
     dispatch({ type: BLOG_DELETE_SUCCESS })
   } catch (error) {

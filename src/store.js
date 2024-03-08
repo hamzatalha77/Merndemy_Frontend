@@ -39,6 +39,10 @@ import {
   blogUpdateReducer
 } from './redux/reducers/blogReducer.js'
 import { categoryListReducer } from './redux/reducers/categoryReducer.js'
+import {
+  subCategoryForCategoryListReducer,
+  subCategoryListReducer
+} from './redux/reducers/subCategoryReducer.js'
 
 const reducer = combineReducers({
   productList: productListReducer,
@@ -69,7 +73,9 @@ const reducer = combineReducers({
   blogList: blogListReducer,
   blogDelete: blogDeleteReducer,
   blogUpdate: blogUpdateReducer,
-  categoryList: categoryListReducer
+  categoryList: categoryListReducer,
+  subCategoryList: subCategoryListReducer,
+  subCategoryForCategoryList: subCategoryForCategoryListReducer
 })
 
 const cartItemsFromStorage = localStorage.getItem('cartItems')

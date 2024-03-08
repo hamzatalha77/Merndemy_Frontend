@@ -9,6 +9,7 @@ import { createProduct } from '../redux/actions/productActions'
 import axios from 'axios'
 import { PRODUCT_CREATE_RESET } from '../redux/constants/productConstants'
 import { listCategories } from '../redux/actions/categoryActions'
+import { listSubCategoriesForCategory } from '../redux/actions/subCategoryActions'
 
 const ProductCreateScreen = ({ history }) => {
   const [name, setName] = useState('')
@@ -16,6 +17,7 @@ const ProductCreateScreen = ({ history }) => {
   const [images, setImages] = useState([])
   const [brand, setBrand] = useState('')
   const [category, setCategory] = useState('')
+  const [subCategory, setSubCategory] = useState('')
   const [countInStock, setCountInStock] = useState(0)
   const [description, setDescription] = useState('')
 
@@ -31,11 +33,21 @@ const ProductCreateScreen = ({ history }) => {
   } = productCreate
 
   const categoryList = useSelector((state) => state.categoryList)
-  const { loading: loadingCategory, error: errorCategory } = categoryList
+  const { categories } = categoryList
+
+  const subCategoryForCategoryList = useSelector(
+    (state) => state.subCategoryForCategoryList
+  )
+  const {
+    subCategories,
+    loading: loadingSubCategories,
+    error: errorSubCategories
+  } = subCategoryForCategoryList
 
   useEffect(() => {
     if (userInfo && userInfo.isAdmin) {
       dispatch(listCategories())
+
       if (successCreate) {
         dispatch({ type: PRODUCT_CREATE_RESET })
         history.push('/admin/productlist')
@@ -43,7 +55,14 @@ const ProductCreateScreen = ({ history }) => {
     } else {
       history.push('/login')
     }
-  }, [dispatch, history, successCreate, userInfo])
+  }, [dispatch, history, userInfo, successCreate])
+
+  const handleCategoryChange = (e) => {
+    const selectedCategoryId = e.target.value
+    setCategory(selectedCategoryId)
+    console.log('Selected Category:', selectedCategoryId)
+    dispatch(listSubCategoriesForCategory(selectedCategoryId))
+  }
 
   const handleImageUpload = async (e) => {
     const files = e.target.files
@@ -123,22 +142,38 @@ const ProductCreateScreen = ({ history }) => {
               onChange={(e) => setPrice(e.target.value)}
             ></Form.Control>
           </Form.Group>
-          {loadingCategory && <Loader></Loader>}
-          {errorCategory && (
-            <Message variant="danger"> {errorCategory} </Message>
-          )}
-          <Form.Group>
+
+          <Form.Group controlId="category">
             <Form.Label>Category</Form.Label>
-            <Form.Select
-              aria-label="Default select example"
-              onChange={(e) => setCategory(e.target.value)}
-            >
-              {categoryList.categories.map((cat) => (
-                <option key={cat._id} value={cat._id}>
-                  {cat.name}
+            <Form.Control as="select" onChange={handleCategoryChange}>
+              <option value="">Select Category</option>
+              {categories.map((category) => (
+                <option key={category._id} value={category._id}>
+                  {category.category_name}
                 </option>
               ))}
-            </Form.Select>
+            </Form.Control>
+          </Form.Group>
+          <Form.Group controlId="subcategory">
+            <Form.Label>SubCategory</Form.Label>
+            <Form.Control
+              as="select"
+              value={subCategory}
+              onChange={(e) => setSubCategory(e.target.value)}
+            >
+              <option value="">Select Subcategory</option>
+              {loadingSubCategories ? (
+                <option>Loading...</option>
+              ) : errorSubCategories ? (
+                <option>{errorSubCategories}</option>
+              ) : (
+                subCategories.map((subCategory) => (
+                  <option key={subCategory._id} value={subCategory._id}>
+                    {subCategory.subCategory_name}
+                  </option>
+                ))
+              )}
+            </Form.Control>
           </Form.Group>
 
           <Form.Group controlId="formFileLg" className="mb-3">

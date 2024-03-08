@@ -5,10 +5,10 @@ import {
   CART_SAVE_SHIPPING_ADDRESS,
   CART_SAVE_PAYMENT_METHOD
 } from '../constants/cartConstants'
-import { DEPLOY_URL } from '../../constants'
+import { BASE_URL } from '../../constants'
 
 export const addToCart = (id, qty) => async (dispatch, getState) => {
-  const { data } = await axios.get(`${DEPLOY_URL}/api/products/${id}`)
+  const { data } = await axios.get(`${BASE_URL}/api/products/${id}`)
   dispatch({
     type: CART_ADD_ITEM,
     payload: {
