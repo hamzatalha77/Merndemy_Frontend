@@ -27,10 +27,15 @@ const Header = () => {
               style={{
                 maxHeight: '100px',
                 position: 'relative',
-                left: '60%'
+                left: '50%'
               }}
               navbarScroll
             >
+              <LinkContainer to="/shop">
+                <Nav.Link>
+                  <i className="fa-solid fa-store"></i>Shop
+                </Nav.Link>
+              </LinkContainer>
               <LinkContainer to="/cart">
                 <Nav.Link>
                   <i className="fas fa-shopping-cart"></i>Cart

@@ -7,7 +7,7 @@ const SearchBox = ({ history }) => {
   const submitHandler = (e) => {
     e.preventDefault()
     if (keyword.trim()) {
-      history.push(`/search/${keyword}`)
+      history.push(`/shop/search/${keyword}`)
     } else {
       history.push('/')
     }
@@ -18,7 +18,7 @@ const SearchBox = ({ history }) => {
       onSubmit={submitHandler}
       style={{
         display: 'flex',
-        justifyContent: 'space-around',
+        justifyContent: 'space-around'
       }}
     >
       <Form.Control

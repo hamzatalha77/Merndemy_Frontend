@@ -74,7 +74,7 @@ const reducer = combineReducers({
   blogDelete: blogDeleteReducer,
   blogUpdate: blogUpdateReducer,
   categoryList: categoryListReducer,
-  subCategoryList: subCategoryListReducer,
+  // subCategoryList: subCategoryListReducer,
   subCategoryForCategoryList: subCategoryForCategoryListReducer
 })
 
