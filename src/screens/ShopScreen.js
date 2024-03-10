@@ -43,7 +43,7 @@ const ShopScreen = ({ match }) => {
               page={page}
               keyword={keyword || ''}
               categoryId={categoryId || ''}
-              subCategoryId={subCategoryId || ''} // Corrected prop name
+              subCategoryId={subCategoryId || ''}
             />
           </>
         )}
