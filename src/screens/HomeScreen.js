@@ -10,6 +10,7 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import Paginate from '../components/Paginate'
 import ProductCarousel from '../components/ProductCarousel'
+import Categories from '../components/Categories'
 
 const HomeScreen = ({ match }) => {
   const keyword = match.params.keyword
@@ -49,6 +50,7 @@ const HomeScreen = ({ match }) => {
               </Col>
             ))}
           </Row>
+          <Categories />
           <Paginate
             pages={pages}
             page={page}

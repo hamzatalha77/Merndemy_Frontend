@@ -1,12 +1,33 @@
-import { categories } from '../data'
-import CategoryItem from './CategoryItem'
+import { useEffect, useMemo } from 'react'
+import Card from 'react-bootstrap/Card'
+import CardGroup from 'react-bootstrap/CardGroup'
+import { listCategories } from '../redux/actions/categoryActions'
+import { useDispatch, useSelector } from 'react-redux'
+
 const Categories = () => {
+  const dispatch = useDispatch()
+  const categoryList = useSelector((state) => state.categoryList)
+  const { categories } = categoryList
+
+  useEffect(() => {
+    dispatch(listCategories())
+  }, [dispatch])
+
+  const memoizedCategories = useMemo(() => categories, [categories])
+
   return (
-    <>
-      {categories.map((item) => (
-        <CategoryItem item={item} key={item.id} />
+    <CardGroup>
+      {memoizedCategories?.map((category) => (
+        <Card key={category._id}>
+          <Card.Body>
+            <Card.Title>{category.category_name}</Card.Title>
+          </Card.Body>
+          <Card.Footer>
+            <small className="text-muted">Last updated 3 mins ago</small>
+          </Card.Footer>
+        </Card>
       ))}
-    </>
+    </CardGroup>
   )
 }
 
