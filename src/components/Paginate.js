@@ -6,6 +6,7 @@ const Paginate = ({
   pages,
   page,
   isAdmin = false,
+  isShop = false,
   keyword = '',
   categoryId = '',
   subCategoryId = ''
@@ -17,14 +18,16 @@ const Paginate = ({
           key={x + 1}
           to={
             !isAdmin
-              ? keyword
-                ? `/shop/search/${keyword}/page/${x + 1}`
-                : categoryId && subCategoryId
-                ? `/shop/category/${categoryId}/subCategory/${subCategoryId}/page/${
-                    x + 1
-                  }`
-                : categoryId
-                ? `/shop/category/${categoryId}/page/${x + 1}`
+              ? isShop
+                ? keyword
+                  ? `/shop/search/${keyword}/page/${x + 1}`
+                  : categoryId && subCategoryId
+                  ? `/shop/category/${categoryId}/subCategory/${subCategoryId}/page/${
+                      x + 1
+                    }`
+                  : categoryId
+                  ? `/shop/category/${categoryId}/page/${x + 1}`
+                  : `/shop/page/${x + 1}`
                 : `/page/${x + 1}`
               : `/admin/productlist/${x + 1}`
           }

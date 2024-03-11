@@ -44,6 +44,7 @@ const ShopScreen = ({ match }) => {
               keyword={keyword || ''}
               categoryId={categoryId || ''}
               subCategoryId={subCategoryId || ''}
+              isShop={true}
             />
           </>
         )}

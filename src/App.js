@@ -73,6 +73,11 @@ const App = () => {
             exact
           />
           <Route
+            path="/shop/category/:categoryId/subCategory/:subCategoryId/page/:pageNumber"
+            component={ShopScreen}
+            exact
+          />
+          <Route
             path="/shop/subCategory/:subCategoryId"
             component={ShopScreen}
             exact
@@ -84,6 +89,7 @@ const App = () => {
             path="/shop/search/:keyword/page/:pageNumber"
             component={ShopScreen}
           />
+          <Route path="/shop/page/:pageNumber" component={ShopScreen} exact />
           <Route path="/page/:pageNumber" component={HomeScreen} exact />
           <Route path="/" component={HomeScreen} exact />
         </Container>
