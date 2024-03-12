@@ -60,7 +60,7 @@ const ProductCreateScreen = ({ history }) => {
   const handleCategoryChange = (e) => {
     const selectedCategoryId = e.target.value
     setCategory(selectedCategoryId)
-    console.log('Selected Category:', selectedCategoryId)
+
     dispatch(listSubCategoriesForCategory(selectedCategoryId))
   }
 

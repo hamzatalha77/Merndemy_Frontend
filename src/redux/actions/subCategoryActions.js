@@ -42,8 +42,6 @@ export const listSubCategoriesForCategory =
         `${BASE_URL}/api/subCategories/category/${categoryId}`
       )
 
-      console.log('SubCategories data:', data)
-
       dispatch({
         type: SUBCATEGORY_LIST_SUCCESS,
         payload: data.subCategories
