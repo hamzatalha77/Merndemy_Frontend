@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { getUserDetails, updateUserProfile } from '../redux/actions/userActions'
-import { listMyOrders } from '../redux/actions/orderActions'
+import { deleteOrder, listMyOrders } from '../redux/actions/orderActions'
 import { USER_UPDATE_PROFILE_RESET } from '../redux/constants/userConstants'
 import axios from 'axios'
 
@@ -32,6 +32,13 @@ const ProfileScreen = ({ location, history }) => {
   const orderListMy = useSelector((state) => state.orderListMy)
   const { loading: loadingOrders, error: errorOrders, orders } = orderListMy
 
+  const orderDelete = useSelector((state) => state.orderDelete)
+  const {
+    loading: loadingDelete,
+    error: errorDelete,
+    success: successDelete
+  } = orderDelete
+
   useEffect(() => {
     if (!userInfo) {
       history.push('/login')
@@ -46,7 +53,7 @@ const ProfileScreen = ({ location, history }) => {
         setAvatar(user.avatar)
       }
     }
-  }, [dispatch, history, userInfo, user, success])
+  }, [dispatch, history, userInfo, successDelete, user, success])
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0]
@@ -80,6 +87,12 @@ const ProfileScreen = ({ location, history }) => {
           avatar: uploadedAvatar || avatar
         })
       )
+    }
+  }
+
+  const deleteHandler = (id) => {
+    if (window.confirm('Are you Sure')) {
+      dispatch(deleteOrder(id))
     }
   }
 
@@ -202,6 +215,15 @@ const ProfileScreen = ({ location, history }) => {
                         Details
                       </Button>
                     </LinkContainer>
+                  </td>
+                  <td>
+                    <Button
+                      className="btn-sm"
+                      onClick={() => deleteHandler(order._id)}
+                      variant="warning"
+                    >
+                      Delete
+                    </Button>
                   </td>
                 </tr>
               ))}

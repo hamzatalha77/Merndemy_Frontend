@@ -263,13 +263,21 @@ export const listOrders = () => async (dispatch, getState) => {
     })
   }
 }
-export const deleteOrder = (id) => async (dispatch) => {
+export const deleteOrder = (id) => async (dispatch, getState) => {
   try {
     dispatch({
       type: ORDER_DELETE_REQUEST
     })
+    const {
+      userLogin: { userInfo }
+    } = getState()
 
-    await axios.delete(`${BASE_URL}/api/orders/myorders/${id}`)
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`
+      }
+    }
+    await axios.delete(`${BASE_URL}/api/orders/myorders/${id}`, config)
 
     dispatch({
       type: ORDER_DELETE_SUCCESS
