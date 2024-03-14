@@ -33,11 +33,7 @@ const ProfileScreen = ({ location, history }) => {
   const { loading: loadingOrders, error: errorOrders, orders } = orderListMy
 
   const orderDelete = useSelector((state) => state.orderDelete)
-  const {
-    loading: loadingDelete,
-    error: errorDelete,
-    success: successDelete
-  } = orderDelete
+  const { success: successDelete } = orderDelete
 
   useEffect(() => {
     if (!userInfo) {

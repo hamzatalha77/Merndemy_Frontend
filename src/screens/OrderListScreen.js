@@ -4,7 +4,7 @@ import { Table, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { listOrders } from '../redux/actions/orderActions'
+import { deleteOrderAdmin, listOrders } from '../redux/actions/orderActions'
 
 const OrderListScreen = ({ history }) => {
   const dispatch = useDispatch()
@@ -14,6 +14,8 @@ const OrderListScreen = ({ history }) => {
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
+  const orderDelete = useSelector((state) => state.orderDelete)
+  const { success: successDelete } = orderDelete
 
   useEffect(() => {
     if (userInfo && userInfo.isAdmin) {
@@ -21,8 +23,13 @@ const OrderListScreen = ({ history }) => {
     } else {
       history.push('/login')
     }
-  }, [dispatch, history, userInfo])
+  }, [dispatch, history, userInfo, successDelete])
 
+  const deleteHandler = (id) => {
+    if (window.confirm('Are you Sure')) {
+      dispatch(deleteOrderAdmin(id))
+    }
+  }
   return (
     <>
       <h1>Orders</h1>
@@ -71,6 +78,15 @@ const OrderListScreen = ({ history }) => {
                       Details
                     </Button>
                   </LinkContainer>
+                </td>
+                <td>
+                  <Button
+                    className="btn-sm"
+                    onClick={() => deleteHandler(order._id)}
+                    variant="danger"
+                  >
+                    Delete
+                  </Button>
                 </td>
               </tr>
             ))}
