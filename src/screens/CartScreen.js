@@ -51,7 +51,6 @@ const CartScreen = ({ match, location, history }) => {
                   </Col>
                   <Col md={2}>$ {item.price}</Col>
                   <Col md={2}>
-                    {' '}
                     <Form.Control
                       as="select"
                       value={item.qty}
@@ -81,7 +80,7 @@ const CartScreen = ({ match, location, history }) => {
               </ListGroup.Item>
             ))}
           </ListGroup>
-        )}{' '}
+        )}
       </Col>
       <Col md={4}>
         <Card>
@@ -108,7 +107,7 @@ const CartScreen = ({ match, location, history }) => {
                 disabled={cartItems.length === 0}
                 onClick={checkoutHandler}
               >
-                Procced To Checkout
+                Proceed To Checkout
               </Button>
             </ListGroup.Item>
           </ListGroup>

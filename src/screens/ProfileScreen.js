@@ -218,7 +218,7 @@ const ProfileScreen = ({ location, history }) => {
                       onClick={() => deleteHandler(order._id)}
                       variant="warning"
                     >
-                      Delete
+                      Cancel My Order
                     </Button>
                   </td>
                 </tr>
