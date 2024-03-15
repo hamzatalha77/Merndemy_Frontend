@@ -64,7 +64,9 @@ const BlogListScreen = ({ history, match }) => {
           <tbody>
             {blogs.map((blog) => (
               <tr key={blog._id}>
-                <td>{blog._id} </td>
+                <LinkContainer to={`/blog/${blog._id}`}>
+                  <td>{blog._id} </td>
+                </LinkContainer>
                 <td>{blog.title} </td>
 
                 <td>
