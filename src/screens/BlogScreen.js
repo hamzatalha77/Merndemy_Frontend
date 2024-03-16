@@ -15,10 +15,15 @@ import {
   MDBRow,
   MDBTextArea
 } from 'mdb-react-ui-kit'
+import { io } from 'socket.io-client'
 
+const socket = io('/', {
+  reconnection: true
+})
 const BlogScreen = ({ match, history }) => {
   const [comment, setComment] = useState('')
   const [comments, setComments] = useState([])
+  const [commentsRealTime, setCommentsRealTime] = useState([])
 
   const [loadingBlog, setLoadingBlog] = useState(true)
 
@@ -37,32 +42,38 @@ const BlogScreen = ({ match, history }) => {
     error: errorBlogComment
   } = blogAddComment
 
-  const addComment = (e) => {
-    e.preventDefault()
-    dispatch(addCommentBlog(match.params.id, { comment }))
-  }
   useEffect(() => {
-    if (successBlogComment) {
-      setComment('')
-    }
     setLoadingBlog(true)
     dispatch(getBlogDetails(match.params.id))
       .then(() => setLoadingBlog(false))
       .catch(() => setLoadingBlog(false))
-  }, [dispatch, match, successBlogComment])
+  }, [dispatch, match])
 
-  // useEffect(() => {
-  //   if (successBlogComment) {
-  //     setComment('')
-  //   }
-  // }, [successBlogComment, userInfo])
+  useEffect(() => {
+    socket.on('new-comment', (newComment) => {
+      setCommentsRealTime(newComment)
+    })
+  })
+
+  useEffect(() => {
+    if (successBlogComment) {
+      setComment('')
+    }
+  }, [successBlogComment, userInfo])
 
   useEffect(() => {
     if (blog && blog.comments) {
       setComments(blog.comments)
     }
-  }, [blog])
+  }, [blog, comment])
 
+  const addComment = (e) => {
+    e.preventDefault()
+    dispatch(addCommentBlog(match.params.id, { comment }))
+  }
+
+  let uiCommentUpdate =
+    commentsRealTime.length > 0 ? commentsRealTime : comments
   return (
     <section className="text-gray-600 body-font">
       {loading ? (
@@ -94,7 +105,7 @@ const BlogScreen = ({ match, history }) => {
               <MDBRow className="justify-content-center">
                 <MDBCol md="12" lg="10" xl="8">
                   <MDBCard>
-                    {comments.map((comment, index) => (
+                    {uiCommentUpdate.map((comment, index) => (
                       <CommentsLits
                         key={index}
                         name={comment.postedBy.name}

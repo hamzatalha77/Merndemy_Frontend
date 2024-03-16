@@ -10,8 +10,8 @@ import {
   productReviewCreateReducer,
   productTopRatedReducer,
   productWishlistReducer
-} from './redux/reducers/productReducers.js'
-import { cartReducer } from './redux/reducers/cartReducer'
+} from './reducers/productReducers.js'
+import { cartReducer } from './reducers/cartReducer.js'
 import {
   userLoginReducer,
   userRegisterReducer,
@@ -21,7 +21,7 @@ import {
   userDeleteReducer,
   userUpdateReducer,
   userWishlistReducer
-} from './redux/reducers/userReducer'
+} from './reducers/userReducer.js'
 
 import {
   orderCreateReducer,
@@ -32,7 +32,7 @@ import {
   orderDeliverReducer,
   orderDeleteReducer,
   orderDeleteAdminReducer
-} from './redux/reducers/orderReducer'
+} from './reducers/orderReducer.js'
 import {
   blogAddCommentReducer,
   blogCreateReducer,
@@ -40,9 +40,9 @@ import {
   blogDetailsReducer,
   blogListReducer,
   blogUpdateReducer
-} from './redux/reducers/blogReducer.js'
-import { categoryListReducer } from './redux/reducers/categoryReducer.js'
-import { subCategoryForCategoryListReducer } from './redux/reducers/subCategoryReducer.js'
+} from './reducers/blogReducer.js'
+import { categoryListReducer } from './reducers/categoryReducer.js'
+import { subCategoryForCategoryListReducer } from './reducers/subCategoryReducer.js'
 
 const reducer = combineReducers({
   productList: productListReducer,

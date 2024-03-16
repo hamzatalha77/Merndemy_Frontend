@@ -9,6 +9,7 @@ import { BLOG_CREATE_RESET } from '../redux/constants/blogConstants'
 
 const BlogCreateScreen = ({ history, match }) => {
   const [title, setTitle] = useState('')
+  const [content, setContent] = useState('')
   const [images, setImages] = useState([])
   const dispatch = useDispatch()
 
@@ -69,7 +70,7 @@ const BlogCreateScreen = ({ history, match }) => {
 
   const submitHandler = (e) => {
     e.preventDefault()
-    dispatch(createBlog({ title, images }))
+    dispatch(createBlog({ title, content, images }))
   }
 
   return (
@@ -86,6 +87,14 @@ const BlogCreateScreen = ({ history, match }) => {
             type="text"
             placeholder="Enter title"
             onChange={(e) => setTitle(e.target.value)}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Label>Content</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter Content"
+            onChange={(e) => setContent(e.target.value)}
           />
         </Form.Group>
 
