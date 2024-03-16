@@ -3,10 +3,28 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getBlogDetails } from '../redux/actions/blogActions'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
+import CommentsLits from '../components/CommentsLits'
+import {
+  MDBBtn,
+  MDBCard,
+  MDBCardFooter,
+  MDBCardImage,
+  MDBCol,
+  MDBContainer,
+  MDBRow,
+  MDBTextArea
+} from 'mdb-react-ui-kit'
 const BlogScreen = ({ match, history }) => {
   const [Title, setTitle] = useState('')
+  const [images, setImages] = useState([])
+  const [createdAt, setCreatedAt] = useState('')
+  const [comment, setComment] = useState('')
+  const [comments, setComments] = useState([])
+
   const [loadingBlog, setLoadingBlog] = useState(true)
+
   const dispatch = useDispatch()
+
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
 
@@ -51,12 +69,49 @@ const BlogScreen = ({ match, history }) => {
                   disrupt butcher paleo intelligentsia pabst before they sold
                   out four loko. 3 wolf moon brooklyn.
                 </p>
-                <a className="text-indigo-500 inline-flex items-center">
-                  Learn More
-                </a>
               </div>
             </div>
           </div>
+          <section style={{ backgroundColor: '#eee' }}>
+            <MDBContainer className="py-5">
+              <MDBRow className="justify-content-center">
+                <MDBCol md="12" lg="10" xl="8">
+                  <MDBCard>
+                    <CommentsLits />
+                    <MDBCardFooter
+                      className="py-3 border-0"
+                      style={{ backgroundColor: '#f8f9fa' }}
+                    >
+                      <div className="d-flex flex-start w-100">
+                        <MDBCardImage
+                          className="rounded-circle shadow-1-strong me-3"
+                          src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(19).webp"
+                          alt="avatar"
+                          width="40"
+                          height="40"
+                        />
+                        <MDBTextArea
+                          label="Message"
+                          id="textAreaExample"
+                          rows={4}
+                          style={{ backgroundColor: '#fff' }}
+                          wrapperClass="w-100"
+                        />
+                      </div>
+                      <div className="float-end mt-2 pt-1">
+                        <MDBBtn size="sm" className="me-1">
+                          Post comment
+                        </MDBBtn>
+                        <MDBBtn outline size="sm">
+                          Cancel
+                        </MDBBtn>
+                      </div>
+                    </MDBCardFooter>
+                  </MDBCard>
+                </MDBCol>
+              </MDBRow>
+            </MDBContainer>
+          </section>
         </div>
       )}
     </section>
