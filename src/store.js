@@ -34,6 +34,7 @@ import {
   orderDeleteAdminReducer
 } from './redux/reducers/orderReducer'
 import {
+  blogAddCommentReducer,
   blogCreateReducer,
   blogDeleteReducer,
   blogDetailsReducer,
@@ -75,7 +76,8 @@ const reducer = combineReducers({
   categoryList: categoryListReducer,
   subCategoryForCategoryList: subCategoryForCategoryListReducer,
   orderDelete: orderDeleteReducer,
-  orderDeleteAdmin: orderDeleteAdminReducer
+  orderDeleteAdmin: orderDeleteAdminReducer,
+  blogAddComment: blogAddCommentReducer
 })
 
 const cartItemsFromStorage = localStorage.getItem('cartItems')

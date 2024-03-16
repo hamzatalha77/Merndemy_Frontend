@@ -31,6 +31,13 @@ const BlogScreen = ({ match, history }) => {
   const blogDetails = useSelector((state) => state.blogDetails)
   const { loading, error, blog } = blogDetails
 
+  const blogAddComment = useSelector((state) => state.blogAddComment)
+  const {
+    success: successBlogComment,
+    loading: loadingBlogComment,
+    error: errorBlogComment
+  } = blogAddComment
+
   useEffect(() => {
     setLoadingBlog(false)
     dispatch(getBlogDetails(match.params.id))

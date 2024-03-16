@@ -1,5 +1,8 @@
 import axios from 'axios'
 import {
+  BLOG_ADD_COMMENT_FAIL,
+  BLOG_ADD_COMMENT_REQUEST,
+  BLOG_ADD_COMMENT_SUCCESS,
   BLOG_CREATE_FAIL,
   BLOG_CREATE_REQUEST,
   BLOG_CREATE_SUCCESS,
@@ -199,6 +202,39 @@ export const deleteBlog = (id) => async (dispatch, getState) => {
     }
     dispatch({
       type: BLOG_DELETE_FAIL,
+      payload: message
+    })
+  }
+}
+export const addCommentBlog = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: BLOG_ADD_COMMENT_REQUEST
+    })
+
+    const {
+      userLogin: { userInfo }
+    } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`
+      }
+    }
+
+    await axios.put(`${BASE_URL}/api/blogs/comment/${id}`, config)
+
+    dispatch({ type: BLOG_ADD_COMMENT_SUCCESS })
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message
+    if (message === 'Not authorized, token failed') {
+      dispatch(logout())
+    }
+    dispatch({
+      type: BLOG_ADD_COMMENT_FAIL,
       payload: message
     })
   }
