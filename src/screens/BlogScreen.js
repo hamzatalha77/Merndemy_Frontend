@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getBlogDetails } from '../redux/actions/blogActions'
+import { addCommentBlog, getBlogDetails } from '../redux/actions/blogActions'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import CommentsLits from '../components/CommentsLits'
+import { Link } from 'react-router-dom'
 import {
   MDBBtn,
   MDBCard,
@@ -14,10 +15,8 @@ import {
   MDBRow,
   MDBTextArea
 } from 'mdb-react-ui-kit'
+
 const BlogScreen = ({ match, history }) => {
-  const [Title, setTitle] = useState('')
-  const [images, setImages] = useState([])
-  const [createdAt, setCreatedAt] = useState('')
   const [comment, setComment] = useState('')
   const [comments, setComments] = useState([])
 
@@ -38,16 +37,35 @@ const BlogScreen = ({ match, history }) => {
     error: errorBlogComment
   } = blogAddComment
 
+  const addComment = (e) => {
+    e.preventDefault()
+    dispatch(addCommentBlog(match.params.id, { comment }))
+  }
   useEffect(() => {
-    setLoadingBlog(false)
+    if (successBlogComment) {
+      setComment('')
+    }
+    setLoadingBlog(true)
     dispatch(getBlogDetails(match.params.id))
       .then(() => setLoadingBlog(false))
       .catch(() => setLoadingBlog(false))
-  }, [dispatch, match])
+  }, [dispatch, match, successBlogComment])
+
+  // useEffect(() => {
+  //   if (successBlogComment) {
+  //     setComment('')
+  //   }
+  // }, [successBlogComment, userInfo])
+
+  useEffect(() => {
+    if (blog && blog.comments) {
+      setComments(blog.comments)
+    }
+  }, [blog])
 
   return (
     <section className="text-gray-600 body-font">
-      {loadingBlog ? (
+      {loading ? (
         <Loader />
       ) : error ? (
         <Message variant="danger">{error}</Message>
@@ -58,23 +76,15 @@ const BlogScreen = ({ match, history }) => {
               <div className="sm:w-1/3 text-center sm:pr-8 sm:py-8">
                 <div className="flex flex-col items-center text-center justify-center">
                   <h2 className="font-medium title-font mt-4 text-gray-900 text-lg">
-                    Phoebe Caulfield
+                    {blog.title}
                   </h2>
                   <div className="w-12 h-1 bg-indigo-500 rounded mt-2 mb-4"></div>
-                  <p className="text-base">{blog.title}</p>
                 </div>
               </div>
               <div className="sm:w-2/3 sm:pl-8 sm:py-8 sm:border-l border-gray-200 sm:border-t-0 border-t mt-4 pt-4 sm:mt-0 text-center sm:text-left">
                 <p className="leading-relaxed text-lg mb-4">
                   Meggings portland fingerstache lyft, post-ironic fixie man bun
                   banh mi umami everyday carry hexagon locavore direct trade art
-                  party. Locavore small batch listicle gastropub farm-to-table
-                  lumbersexual salvia messenger bag. Coloring book flannel
-                  truffaut craft beer drinking vinegar sartorial, disrupt
-                  fashion axe normcore meh butcher. Portland 90's scenester
-                  vexillologist forage post-ironic asymmetrical, chartreuse
-                  disrupt butcher paleo intelligentsia pabst before they sold
-                  out four loko. 3 wolf moon brooklyn.
                 </p>
               </div>
             </div>
@@ -84,36 +94,52 @@ const BlogScreen = ({ match, history }) => {
               <MDBRow className="justify-content-center">
                 <MDBCol md="12" lg="10" xl="8">
                   <MDBCard>
-                    <CommentsLits />
-                    <MDBCardFooter
-                      className="py-3 border-0"
-                      style={{ backgroundColor: '#f8f9fa' }}
-                    >
-                      <div className="d-flex flex-start w-100">
-                        <MDBCardImage
-                          className="rounded-circle shadow-1-strong me-3"
-                          src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(19).webp"
-                          alt="avatar"
-                          width="40"
-                          height="40"
-                        />
-                        <MDBTextArea
-                          label="Message"
-                          id="textAreaExample"
-                          rows={4}
-                          style={{ backgroundColor: '#fff' }}
-                          wrapperClass="w-100"
-                        />
-                      </div>
-                      <div className="float-end mt-2 pt-1">
-                        <MDBBtn size="sm" className="me-1">
-                          Post comment
-                        </MDBBtn>
-                        <MDBBtn outline size="sm">
-                          Cancel
-                        </MDBBtn>
-                      </div>
-                    </MDBCardFooter>
+                    {comments.map((comment, index) => (
+                      <CommentsLits
+                        key={index}
+                        name={comment.postedBy.name}
+                        text={comment.text}
+                      />
+                    ))}
+                    {userInfo ? (
+                      <form onSubmit={addComment}>
+                        <MDBCardFooter
+                          className="py-3 border-0"
+                          style={{ backgroundColor: '#f8f9fa' }}
+                        >
+                          <div className="d-flex flex-start w-100">
+                            <MDBCardImage
+                              className="rounded-circle shadow-1-strong me-3"
+                              src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(19).webp"
+                              alt="avatar"
+                              width="40"
+                              height="40"
+                            />
+                            <MDBTextArea
+                              id="textAreaExample"
+                              rows={4}
+                              style={{ backgroundColor: '#fff' }}
+                              wrapperClass="w-100"
+                              value={comment}
+                              onChange={(e) => setComment(e.target.value)}
+                            />
+                          </div>
+                          <div className="float-end mt-2 pt-1">
+                            <MDBBtn size="sm" className="me-1">
+                              Post comment
+                            </MDBBtn>
+                            <MDBBtn outline size="sm">
+                              Cancel
+                            </MDBBtn>
+                          </div>
+                        </MDBCardFooter>
+                      </form>
+                    ) : (
+                      <Message>
+                        Please <Link to="/login">sign In </Link>To Write a
+                        Review
+                      </Message>
+                    )}
                   </MDBCard>
                 </MDBCol>
               </MDBRow>

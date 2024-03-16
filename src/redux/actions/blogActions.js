@@ -206,36 +206,41 @@ export const deleteBlog = (id) => async (dispatch, getState) => {
     })
   }
 }
-export const addCommentBlog = (id) => async (dispatch, getState) => {
-  try {
-    dispatch({
-      type: BLOG_ADD_COMMENT_REQUEST
-    })
+export const addCommentBlog =
+  (blogId, comment) => async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: BLOG_ADD_COMMENT_REQUEST
+      })
 
-    const {
-      userLogin: { userInfo }
-    } = getState()
+      const {
+        userLogin: { userInfo }
+      } = getState()
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.token}`
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`
+        }
       }
-    }
 
-    await axios.put(`${BASE_URL}/api/blogs/comment/${id}`, config)
+      await axios.put(
+        `${BASE_URL}/api/blogs/comment/${blogId}`,
+        comment,
+        config
+      )
 
-    dispatch({ type: BLOG_ADD_COMMENT_SUCCESS })
-  } catch (error) {
-    const message =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message
-    if (message === 'Not authorized, token failed') {
-      dispatch(logout())
+      dispatch({ type: BLOG_ADD_COMMENT_SUCCESS })
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      if (message === 'Not authorized, token failed') {
+        dispatch(logout())
+      }
+      dispatch({
+        type: BLOG_ADD_COMMENT_FAIL,
+        payload: message
+      })
     }
-    dispatch({
-      type: BLOG_ADD_COMMENT_FAIL,
-      payload: message
-    })
   }
-}
