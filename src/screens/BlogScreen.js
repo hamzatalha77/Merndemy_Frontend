@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addCommentBlog, getBlogDetails } from '../redux/actions/blogActions'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
-import CommentsLits from '../components/CommentsLits'
+
 import { Link } from 'react-router-dom'
 import {
   MDBBtn,
@@ -16,11 +16,12 @@ import {
   MDBTextArea
 } from 'mdb-react-ui-kit'
 import { io } from 'socket.io-client'
+import CommentsList from '../components/CommentsList'
 
 const socket = io('/', {
   reconnection: true
 })
-const BlogScreen = ({ match, history }) => {
+const BlogScreen = ({ match }) => {
   const [comment, setComment] = useState('')
   const [comments, setComments] = useState([])
   const [commentsRealTime, setCommentsRealTime] = useState([])
@@ -106,7 +107,7 @@ const BlogScreen = ({ match, history }) => {
                 <MDBCol md="12" lg="10" xl="8">
                   <MDBCard>
                     {uiCommentUpdate.map((comment, index) => (
-                      <CommentsLits
+                      <CommentsList
                         key={index}
                         name={comment.postedBy.name}
                         text={comment.text}
