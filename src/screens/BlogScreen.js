@@ -119,7 +119,7 @@ const BlogScreen = ({ match }) => {
                           <div className="d-flex flex-start w-100">
                             <MDBCardImage
                               className="rounded-circle shadow-1-strong me-3"
-                              src={comment.postedBy.image}
+                              src={comment.postedBy.avatar}
                               alt="avatar"
                               width="40"
                               height="40"
