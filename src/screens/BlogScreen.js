@@ -120,7 +120,7 @@ const BlogScreen = ({ match }) => {
                             <MDBCardImage
                               className="rounded-circle shadow-1-strong me-3"
                               src={comment.postedBy.avatar}
-                              alt="avatar"
+                              alt={comment.text}
                               width="40"
                               height="40"
                             />
