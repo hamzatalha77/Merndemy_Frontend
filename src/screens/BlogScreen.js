@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addCommentBlog, getBlogDetails } from '../redux/actions/blogActions'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
-
 import { Link } from 'react-router-dom'
 import {
   MDBBtn,
@@ -21,6 +20,7 @@ import CommentsList from '../components/CommentsList'
 const socket = io('/', {
   reconnection: true
 })
+
 const BlogScreen = ({ match }) => {
   const [comment, setComment] = useState('')
   const [comments, setComments] = useState([])
@@ -43,29 +43,27 @@ const BlogScreen = ({ match }) => {
 
   useEffect(() => {
     socket.on('new-comment', (newComment) => {
-      setCommentsRealTime(newComment)
+      setCommentsRealTime((prevComments) => [...prevComments, newComment])
     })
-  })
+  }, [])
 
   const addComment = (e) => {
     e.preventDefault()
     dispatch(addCommentBlog(match.params.id, { comment }))
   }
+
   useEffect(() => {
-    if (successBlogComment) {
-      setComment('')
-      socket.emit('comment', blog.comment)
-    }
-  }, [successBlogComment, userInfo, blog.comment])
+    socket.on('new-comment', (newComment) => {
+      setComments((prevComments) => [...prevComments, newComment])
+    })
+  }, [])
 
   useEffect(() => {
     if (blog && blog.comments) {
       setComments(blog.comments)
     }
-  }, [blog, comment])
+  }, [blog])
 
-  let uiCommentUpdate =
-    commentsRealTime.length > 0 ? commentsRealTime : comments
   return (
     <section className="text-gray-600 body-font">
       {loading ? (
@@ -94,7 +92,7 @@ const BlogScreen = ({ match }) => {
               <MDBRow className="justify-content-center">
                 <MDBCol md="12" lg="10" xl="8">
                   <MDBCard>
-                    {uiCommentUpdate.map((comment, index) => (
+                    {comments.map((comment, index) => (
                       <CommentsList
                         key={index}
                         name={comment.postedBy.name}
@@ -111,7 +109,7 @@ const BlogScreen = ({ match }) => {
                           <div className="d-flex flex-start w-100">
                             <MDBCardImage
                               className="rounded-circle shadow-1-strong me-3"
-                              src={comment.postedBy && comment.postedBy.avatar}
+                              src=""
                               alt={comment.text}
                               width="40"
                               height="40"
