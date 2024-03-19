@@ -54,8 +54,9 @@ const BlogScreen = ({ match }) => {
   useEffect(() => {
     if (successBlogComment) {
       setComment('')
+      socket.emit('comment', blog.comment)
     }
-  }, [successBlogComment, userInfo])
+  }, [successBlogComment, userInfo, blog.comment])
 
   useEffect(() => {
     if (blog && blog.comments) {
