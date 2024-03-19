@@ -26,8 +26,6 @@ const BlogScreen = ({ match }) => {
   const [comments, setComments] = useState([])
   const [commentsRealTime, setCommentsRealTime] = useState([])
 
-  const [loadingBlog, setLoadingBlog] = useState(true)
-
   const dispatch = useDispatch()
 
   const userLogin = useSelector((state) => state.userLogin)
@@ -37,17 +35,10 @@ const BlogScreen = ({ match }) => {
   const { loading, error, blog } = blogDetails
 
   const blogAddComment = useSelector((state) => state.blogAddComment)
-  const {
-    success: successBlogComment,
-    loading: loadingBlogComment,
-    error: errorBlogComment
-  } = blogAddComment
+  const { success: successBlogComment } = blogAddComment
 
   useEffect(() => {
-    setLoadingBlog(true)
     dispatch(getBlogDetails(match.params.id))
-      .then(() => setLoadingBlog(false))
-      .catch(() => setLoadingBlog(false))
   }, [dispatch, match])
 
   useEffect(() => {
@@ -56,6 +47,10 @@ const BlogScreen = ({ match }) => {
     })
   })
 
+  const addComment = (e) => {
+    e.preventDefault()
+    dispatch(addCommentBlog(match.params.id, { comment }))
+  }
   useEffect(() => {
     if (successBlogComment) {
       setComment('')
@@ -67,11 +62,6 @@ const BlogScreen = ({ match }) => {
       setComments(blog.comments)
     }
   }, [blog, comment])
-
-  const addComment = (e) => {
-    e.preventDefault()
-    dispatch(addCommentBlog(match.params.id, { comment }))
-  }
 
   let uiCommentUpdate =
     commentsRealTime.length > 0 ? commentsRealTime : comments
