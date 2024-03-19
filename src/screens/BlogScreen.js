@@ -108,6 +108,7 @@ const BlogScreen = ({ match }) => {
                         key={index}
                         name={comment.postedBy.name}
                         text={comment.text}
+                        avatar={comment.postedBy.avatar}
                       />
                     ))}
                     {userInfo ? (
@@ -119,7 +120,7 @@ const BlogScreen = ({ match }) => {
                           <div className="d-flex flex-start w-100">
                             <MDBCardImage
                               className="rounded-circle shadow-1-strong me-3"
-                              src={comment.postedBy.avatar}
+                              src={comment.postedBy && comment.postedBy.avatar}
                               alt={comment.text}
                               width="40"
                               height="40"
