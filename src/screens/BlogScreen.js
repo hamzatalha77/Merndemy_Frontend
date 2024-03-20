@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addCommentBlog, getBlogDetails } from '../redux/actions/blogActions'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
+import CommentsList from '../components/CommentsList'
 import { Link } from 'react-router-dom'
 import {
   MDBBtn,
@@ -14,17 +15,12 @@ import {
   MDBRow,
   MDBTextArea
 } from 'mdb-react-ui-kit'
-import { io } from 'socket.io-client'
-import CommentsList from '../components/CommentsList'
 
-const socket = io('/', {
-  reconnection: true
-})
-
-const BlogScreen = ({ match }) => {
+const BlogScreen = ({ match, history }) => {
   const [comment, setComment] = useState('')
+  const [avatar, setAvatar] = useState('')
+  const [loadingBlog, setLoadingBlog] = useState(true)
   const [comments, setComments] = useState([])
-  const [commentsRealTime, setCommentsRealTime] = useState([])
 
   const dispatch = useDispatch()
 
@@ -35,17 +31,27 @@ const BlogScreen = ({ match }) => {
   const { loading, error, blog } = blogDetails
 
   const blogAddComment = useSelector((state) => state.blogAddComment)
-  const { success: successBlogComment } = blogAddComment
+  const {
+    success: successBlogComment,
+    loading: loadingBlogComment,
+    error: errorBlogComment
+  } = blogAddComment
 
   useEffect(() => {
+    setLoadingBlog(true)
+    setAvatar(userInfo.avatar)
     dispatch(getBlogDetails(match.params.id))
+      .then(() => setLoadingBlog(false))
+      .catch(() => setLoadingBlog(false))
   }, [dispatch, match])
 
   useEffect(() => {
-    socket.on('new-comment', (newComment) => {
-      setCommentsRealTime((prevComments) => [...prevComments, newComment])
-    })
-  }, [])
+    if (successBlogComment) {
+      setComment('')
+
+      setComments([...comments, { text: comment, postedBy: userInfo }])
+    }
+  }, [successBlogComment, comment, comments, userInfo])
 
   const addComment = (e) => {
     e.preventDefault()
@@ -53,20 +59,13 @@ const BlogScreen = ({ match }) => {
   }
 
   useEffect(() => {
-    socket.on('new-comment', (newComment) => {
-      setComments((prevComments) => [...prevComments, newComment])
-    })
-  }, [])
-
-  useEffect(() => {
     if (blog && blog.comments) {
       setComments(blog.comments)
     }
   }, [blog])
-
   return (
     <section className="text-gray-600 body-font">
-      {loading ? (
+      {loadingBlog ? (
         <Loader />
       ) : error ? (
         <Message variant="danger">{error}</Message>
@@ -83,7 +82,10 @@ const BlogScreen = ({ match }) => {
                 </div>
               </div>
               <div className="sm:w-2/3 sm:pl-8 sm:py-8 sm:border-l border-gray-200 sm:border-t-0 border-t mt-4 pt-4 sm:mt-0 text-center sm:text-left">
-                <p className="leading-relaxed text-lg mb-4">{blog.content}</p>
+                <p className="leading-relaxed text-lg mb-4">
+                  Meggings portland fingerstache lyft, post-ironic fixie man bun
+                  banh mi umami everyday carry hexagon locavore direct trade art
+                </p>
               </div>
             </div>
           </div>
@@ -97,9 +99,9 @@ const BlogScreen = ({ match }) => {
                         key={index}
                         name={comment.postedBy.name}
                         text={comment.text}
-                        avatar={comment.postedBy.avatar}
                       />
                     ))}
+
                     {userInfo ? (
                       <form onSubmit={addComment}>
                         <MDBCardFooter
@@ -109,8 +111,8 @@ const BlogScreen = ({ match }) => {
                           <div className="d-flex flex-start w-100">
                             <MDBCardImage
                               className="rounded-circle shadow-1-strong me-3"
-                              src=""
-                              alt={comment.text}
+                              src={userInfo.avatar}
+                              alt="avatar"
                               width="40"
                               height="40"
                             />
