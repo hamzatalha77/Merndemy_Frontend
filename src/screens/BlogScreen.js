@@ -46,12 +46,11 @@ const BlogScreen = ({ match, history }) => {
   }, [dispatch, match])
 
   useEffect(() => {
-    if (successBlogComment) {
-      setComment('')
-
+    if (successBlogComment && comment.trim() !== '') {
       setComments([...comments, { text: comment, postedBy: userInfo }])
+      setComment('')
     }
-  }, [successBlogComment, comment, comments, userInfo])
+  }, [successBlogComment, comment, userInfo])
 
   const addComment = (e) => {
     e.preventDefault()
