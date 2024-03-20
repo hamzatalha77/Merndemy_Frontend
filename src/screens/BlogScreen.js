@@ -98,6 +98,7 @@ const BlogScreen = ({ match, history }) => {
                         key={index}
                         name={comment.postedBy.name}
                         text={comment.text}
+                        avatar={comment.postedBy.avatar} // Pass the avatar information
                       />
                     ))}
 

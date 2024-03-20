@@ -1,6 +1,7 @@
 import React from 'react'
 import { MDBCardBody, MDBCardImage } from 'mdb-react-ui-kit'
-const CommentsLits = ({ name, text, avatar }) => {
+
+const CommentsList = ({ name, text, avatar }) => {
   return (
     <MDBCardBody>
       <div className="d-flex flex-start align-items-center">
@@ -22,4 +23,4 @@ const CommentsLits = ({ name, text, avatar }) => {
   )
 }
 
-export default CommentsLits
+export default CommentsList
