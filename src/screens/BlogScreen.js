@@ -31,11 +31,7 @@ const BlogScreen = ({ match, history }) => {
   const { loading, error, blog } = blogDetails
 
   const blogAddComment = useSelector((state) => state.blogAddComment)
-  const {
-    success: successBlogComment,
-    loading: loadingBlogComment,
-    error: errorBlogComment
-  } = blogAddComment
+  const { success: successBlogComment } = blogAddComment
 
   useEffect(() => {
     setLoadingBlog(true)
@@ -81,10 +77,7 @@ const BlogScreen = ({ match, history }) => {
                 </div>
               </div>
               <div className="sm:w-2/3 sm:pl-8 sm:py-8 sm:border-l border-gray-200 sm:border-t-0 border-t mt-4 pt-4 sm:mt-0 text-center sm:text-left">
-                <p className="leading-relaxed text-lg mb-4">
-                  Meggings portland fingerstache lyft, post-ironic fixie man bun
-                  banh mi umami everyday carry hexagon locavore direct trade art
-                </p>
+                <p className="leading-relaxed text-lg mb-4">{blog.content}</p>
               </div>
             </div>
           </div>
@@ -98,7 +91,7 @@ const BlogScreen = ({ match, history }) => {
                         key={index}
                         name={comment.postedBy.name}
                         text={comment.text}
-                        avatar={comment.postedBy.avatar} // Pass the avatar information
+                        avatar={comment.postedBy.avatar}
                       />
                     ))}
 
@@ -111,7 +104,7 @@ const BlogScreen = ({ match, history }) => {
                           <div className="d-flex flex-start w-100">
                             <MDBCardImage
                               className="rounded-circle shadow-1-strong me-3"
-                              src={userInfo.avatar}
+                              src={avatar}
                               alt="avatar"
                               width="40"
                               height="40"
