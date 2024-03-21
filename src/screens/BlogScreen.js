@@ -91,7 +91,6 @@ const BlogScreen = ({ match, history }) => {
                         key={index}
                         name={comment.postedBy.name}
                         text={comment.text}
-                        avatar={comment.postedBy.avatar}
                       />
                     ))}
 
@@ -104,7 +103,7 @@ const BlogScreen = ({ match, history }) => {
                           <div className="d-flex flex-start w-100">
                             <MDBCardImage
                               className="rounded-circle shadow-1-strong me-3"
-                              src={avatar}
+                              src=""
                               alt="avatar"
                               width="40"
                               height="40"
