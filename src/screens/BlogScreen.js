@@ -52,7 +52,7 @@ const BlogScreen = ({ match, history }) => {
     e.preventDefault()
     dispatch(addCommentBlog(match.params.id, { comment }))
   }
-
+  console.log(userInfo.avatar)
   useEffect(() => {
     if (blog && blog.comments) {
       setComments(blog.comments)
@@ -91,6 +91,7 @@ const BlogScreen = ({ match, history }) => {
                         key={index}
                         name={comment.postedBy.name}
                         text={comment.text}
+                        avatar={comment.postedBy.avatar}
                       />
                     ))}
 
@@ -103,7 +104,7 @@ const BlogScreen = ({ match, history }) => {
                           <div className="d-flex flex-start w-100">
                             <MDBCardImage
                               className="rounded-circle shadow-1-strong me-3"
-                              src=""
+                              src={userInfo && userInfo.avatar}
                               alt="avatar"
                               width="40"
                               height="40"

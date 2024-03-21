@@ -1,13 +1,13 @@
 import React from 'react'
 import { MDBCardBody, MDBCardImage } from 'mdb-react-ui-kit'
 
-const CommentsList = ({ name, text }) => {
+const CommentsList = ({ name, text, avatar }) => {
   return (
     <MDBCardBody>
       <div className="d-flex flex-start align-items-center">
         <MDBCardImage
           className="rounded-circle shadow-1-strong me-3"
-          src=""
+          src={avatar}
           alt="avatar"
           width="60"
           height="60"
