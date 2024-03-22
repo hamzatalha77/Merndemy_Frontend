@@ -28,7 +28,7 @@ const BlogScreen = ({ match, history }) => {
   const { userInfo } = userLogin
 
   const blogDetails = useSelector((state) => state.blogDetails)
-  const { loading, error, blog } = blogDetails
+  const { error, blog } = blogDetails
 
   const blogAddComment = useSelector((state) => state.blogAddComment)
   const { success: successBlogComment } = blogAddComment
