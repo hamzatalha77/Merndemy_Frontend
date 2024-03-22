@@ -18,7 +18,7 @@ import {
 
 const BlogScreen = ({ match, history }) => {
   const [comment, setComment] = useState('')
-  const [avatar, setAvatar] = useState('')
+
   const [loadingBlog, setLoadingBlog] = useState(true)
   const [comments, setComments] = useState([])
 
@@ -35,7 +35,7 @@ const BlogScreen = ({ match, history }) => {
 
   useEffect(() => {
     setLoadingBlog(true)
-    setAvatar(userInfo.avatar)
+
     dispatch(getBlogDetails(match.params.id))
       .then(() => setLoadingBlog(false))
       .catch(() => setLoadingBlog(false))
