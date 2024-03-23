@@ -12,6 +12,7 @@ import axios from 'axios'
 const BlogEditScreen = ({ match, history }) => {
   const blogId = match.params.id
   const [title, setTitle] = useState('')
+  const [content, setContent] = useState('')
   const [images, setImages] = useState([])
   const [newImages, setNewImages] = useState([])
   const dispatch = useDispatch()
@@ -40,6 +41,7 @@ const BlogEditScreen = ({ match, history }) => {
         dispatch(getBlogDetails(blogId))
       } else {
         setTitle(blog.title)
+        setContent(blog.content)
         setImages(blog.images)
       }
     }
@@ -108,6 +110,15 @@ const BlogEditScreen = ({ match, history }) => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
               ></Form.Control>
+              <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Label>Content</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter Content"
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
+                />
+              </Form.Group>
             </Form.Group>
 
             <div>
