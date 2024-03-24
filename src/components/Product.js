@@ -14,7 +14,7 @@ const Product = ({ product }) => {
     >
       <Link to={`/product/${product._id}`}>
         <Card.Img
-          src={product.image}
+          src={product.images[0]}
           variant="top"
           style={{ width: '200px', height: '200px' }}
         />

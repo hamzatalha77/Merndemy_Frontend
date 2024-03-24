@@ -50,7 +50,7 @@ const ProductScreen = ({ history, match }) => {
   const { error: errorWish, loading: loadingWishlist } = productWishlist
 
   const addToCartHandler = () => {
-    history.push(`/cart/${match.params.id}?qty=${qty}`)
+    history.push(`/cart/${product._id}?qty=${qty}`)
   }
 
   const submitHandler = (e) => {
