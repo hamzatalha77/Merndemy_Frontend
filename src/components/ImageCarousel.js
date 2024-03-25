@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const ImageCarousel = ({ images }) => {
+const ImageCarousel = ({ images, name }) => {
   const [activeIndex, setActiveIndex] = useState(0)
 
   const hoverHandler = (index) => {
@@ -17,12 +17,12 @@ const ImageCarousel = ({ images }) => {
               key={i}
               onMouseOver={() => hoverHandler(i)}
             >
-              <img src={image} alt="" />
+              <img src={image} alt={name} />
             </div>
           ))}
         </div>
         <div className="left_2">
-          <img src={images[activeIndex]} alt="Product" />
+          <img src={images[activeIndex]} alt={name} />
         </div>
       </div>
       <div className="right"></div>

@@ -123,7 +123,7 @@ const ProductScreen = ({ history, match }) => {
             <Row>
               <Col md={6}>
                 {product.images && product.images.length > 0 ? (
-                  <ImageCarousel images={product.images} />
+                  <ImageCarousel images={product.images} name={product.name} />
                 ) : (
                   <Message variant="info">No images available</Message>
                 )}
