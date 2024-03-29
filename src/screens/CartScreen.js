@@ -95,6 +95,18 @@ const CartScreen = ({ match, location, history }) => {
                 .reduce((acc, item) => acc + item.qty * item.price, 0)
                 .toFixed(2)}
             </ListGroup.Item>
+            <ListGroup.Item>
+              <Row>
+                <Col>
+                  <Button type="button" className="btn-block">
+                    Add Coupon
+                  </Button>
+                </Col>
+                <Col>
+                  <Form.Control type="text" placeholder="Enter Coupon" />
+                </Col>
+              </Row>
+            </ListGroup.Item>
             <ListGroup.Item
               style={{
                 justifyContent: 'center',
