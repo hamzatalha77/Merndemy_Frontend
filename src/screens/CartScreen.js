@@ -25,6 +25,9 @@ const CartScreen = ({ match, location, history }) => {
   const checkoutHandler = () => {
     history.push('/login?redirect=shipping')
   }
+  const finalTotal = cartItems
+    .reduce((acc, item) => acc + item.qty * item.price, 0)
+    .toFixed(2)
   return (
     <Row>
       <Col md={8}>
@@ -90,10 +93,18 @@ const CartScreen = ({ match, location, history }) => {
                 Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)})
                 item
               </h2>
-              $
-              {cartItems
-                .reduce((acc, item) => acc + item.qty * item.price, 0)
-                .toFixed(2)}
+            </ListGroup.Item>
+            <ListGroup.Item>
+              <Row>
+                <Col>Total</Col>
+                <Col> ${finalTotal}</Col>
+              </Row>
+            </ListGroup.Item>
+            <ListGroup.Item>
+              <Row>
+                <Col>Total after discount</Col>
+                <Col> ${finalTotal}</Col>
+              </Row>
             </ListGroup.Item>
             <ListGroup.Item>
               <Row>

@@ -49,6 +49,7 @@ import {
   subCategoryCreateReducer,
   subCategoryForCategoryListReducer
 } from './reducers/subCategoryReducer.js'
+import { couponApplyReducer } from './reducers/couponReducer.js'
 
 const reducer = combineReducers({
   productList: productListReducer,
@@ -85,7 +86,8 @@ const reducer = combineReducers({
   orderDeleteAdmin: orderDeleteAdminReducer,
   blogAddComment: blogAddCommentReducer,
   categoryCreate: categoryCreateReducer,
-  subCategoryCreate: subCategoryCreateReducer
+  subCategoryCreate: subCategoryCreateReducer,
+  couponApply: couponApplyReducer
 })
 
 const cartItemsFromStorage = localStorage.getItem('cartItems')
