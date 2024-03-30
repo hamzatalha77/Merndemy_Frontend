@@ -20,6 +20,13 @@ export const addToCart = (id, qty) => async (dispatch, getState) => {
       qty
     }
   })
+  const {
+    cart: { cartItems }
+  } = getState()
+  const total = cartItems
+    .reduce((acc, item) => acc + item.qty * item.price, 0)
+    .toFixed(2)
+  dispatch({ type: 'UPDATE_CART_TOTAL', payload: total })
   localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems))
 }
 export const removeFromCart = (id) => async (dispatch, getState) => {

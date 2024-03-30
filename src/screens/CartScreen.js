@@ -14,11 +14,13 @@ import {
 import Message from '../components/Message'
 import { addToCart, removeFromCart } from '../redux/actions/cartActions'
 import { applyCoupon } from '../redux/actions/couponActions'
+import { CART_APPLY_COUPON } from '../redux/constants/cartConstants'
 
 const CartScreen = ({ match, location, history }) => {
   const [code, setCode] = useState('')
   const [discountedTotal, setDiscountedTotal] = useState(null)
   const [appliedCoupon, setAppliedCoupon] = useState(null)
+  const [isCouponApplied, setIsCouponApplied] = useState(false) // Flag to track if coupon has been applied
   const productId = match.params.id
   const qty = location.search ? Number(location.search.split('=')[1]) : 1
   const dispatch = useDispatch()
@@ -51,18 +53,26 @@ const CartScreen = ({ match, location, history }) => {
     .toFixed(2)
 
   useEffect(() => {
-    console.log('Coupon state:', coupon)
     if (coupon && coupon.message === 'Coupon code is valid') {
-      const discountPercent = coupon.percent
-      console.log(discountPercent)
-      const discountAmount = (finalTotal * discountPercent) / 100
-      const newDiscountedTotal = (finalTotal - discountAmount).toFixed(2)
-      console.log('Discounted total:', newDiscountedTotal)
-      setDiscountedTotal(newDiscountedTotal)
+      const discountPercent = parseFloat(coupon.percent)
+      if (!isNaN(discountPercent)) {
+        const discountAmount = (finalTotal * discountPercent) / 100
+        const newDiscountedTotal = (finalTotal - discountAmount).toFixed(2)
+        setDiscountedTotal(newDiscountedTotal)
+        setAppliedCoupon(coupon.percent)
+        if (!isCouponApplied) {
+          dispatch({ type: CART_APPLY_COUPON, payload: { discountPercent } })
+          setIsCouponApplied(true) // Set the flag to true after dispatching
+        }
+      } else {
+        setDiscountedTotal(finalTotal)
+        setAppliedCoupon(null)
+      }
     } else {
       setDiscountedTotal(finalTotal)
+      setAppliedCoupon(null)
     }
-  }, [coupon, finalTotal])
+  }, [coupon, finalTotal, isCouponApplied, dispatch])
 
   return (
     <Row>
