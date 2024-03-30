@@ -1,4 +1,4 @@
-import { axios } from 'axios'
+import axios from 'axios'
 import { BASE_URL } from '../../constants'
 import {
   COUPON_APPLY_FAIL,
@@ -6,15 +6,19 @@ import {
   COUPON_APPLY_SUCCESS
 } from '../constants/couponConstants'
 
-export const applyCoupon = (code) => async (dispatch) => {
+export const applyCoupon = (code) => async (dispatch, getState) => {
   try {
     dispatch({
       type: COUPON_APPLY_REQUEST
     })
 
+    const {
+      userLogin: { userInfo }
+    } = getState()
+
     const config = {
       headers: {
-        'Content-Type': 'application/json'
+        Authorization: `Bearer ${userInfo.token}`
       }
     }
 
@@ -23,7 +27,7 @@ export const applyCoupon = (code) => async (dispatch) => {
       { code },
       config
     )
-
+    console.log(data)
     dispatch({
       type: COUPON_APPLY_SUCCESS,
       payload: data

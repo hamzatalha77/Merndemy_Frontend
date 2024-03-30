@@ -1,33 +1,69 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap'
+import {
+  Row,
+  Col,
+  ListGroup,
+  Image,
+  Form,
+  Button,
+  Card,
+  Spinner
+} from 'react-bootstrap'
 import Message from '../components/Message'
 import { addToCart, removeFromCart } from '../redux/actions/cartActions'
+import { applyCoupon } from '../redux/actions/couponActions'
+
 const CartScreen = ({ match, location, history }) => {
+  const [code, setCode] = useState('')
+  const [discountedTotal, setDiscountedTotal] = useState(null)
+  const [appliedCoupon, setAppliedCoupon] = useState(null)
   const productId = match.params.id
-
   const qty = location.search ? Number(location.search.split('=')[1]) : 1
-
   const dispatch = useDispatch()
-
   const cart = useSelector((state) => state.cart)
   const { cartItems } = cart
+  const couponApply = useSelector((state) => state.couponApply)
+  const { loading, error, coupon } = couponApply
 
   useEffect(() => {
     if (productId) {
       dispatch(addToCart(productId, qty))
     }
   }, [dispatch, productId, qty])
+
   const removeFromCartHandler = (id) => {
     dispatch(removeFromCart(id))
   }
+
   const checkoutHandler = () => {
     history.push('/login?redirect=shipping')
   }
+
+  const submitCoupon = (e) => {
+    e.preventDefault()
+    dispatch(applyCoupon(code))
+  }
+
   const finalTotal = cartItems
     .reduce((acc, item) => acc + item.qty * item.price, 0)
     .toFixed(2)
+
+  useEffect(() => {
+    console.log('Coupon state:', coupon)
+    if (coupon && coupon.message === 'Coupon code is valid') {
+      const discountPercent = coupon.percent
+      console.log(discountPercent)
+      const discountAmount = (finalTotal * discountPercent) / 100
+      const newDiscountedTotal = (finalTotal - discountAmount).toFixed(2)
+      console.log('Discounted total:', newDiscountedTotal)
+      setDiscountedTotal(newDiscountedTotal)
+    } else {
+      setDiscountedTotal(finalTotal)
+    }
+  }, [coupon, finalTotal])
+
   return (
     <Row>
       <Col md={8}>
@@ -42,12 +78,7 @@ const CartScreen = ({ match, location, history }) => {
               <ListGroup.Item key={item.product}>
                 <Row>
                   <Col md={2}>
-                    <Image
-                      src={item.image}
-                      alt={item.name}
-                      fluid
-                      rounded
-                    ></Image>
+                    <Image src={item.image} alt={item.name} fluid rounded />
                   </Col>
                   <Col md={3}>
                     <Link to={`/product/${item.product}`}>{item.name}</Link>
@@ -103,20 +134,46 @@ const CartScreen = ({ match, location, history }) => {
             <ListGroup.Item>
               <Row>
                 <Col>Total after discount</Col>
-                <Col> ${finalTotal}</Col>
+                <Col>
+                  $
+                  {loading ? (
+                    <Spinner animation="border" />
+                  ) : discountedTotal !== null ? (
+                    discountedTotal
+                  ) : (
+                    finalTotal
+                  )}
+                </Col>
               </Row>
             </ListGroup.Item>
             <ListGroup.Item>
               <Row>
                 <Col>
-                  <Button type="button" className="btn-block">
-                    Add Coupon
+                  <Button
+                    type="button"
+                    onClick={submitCoupon}
+                    className="btn-block"
+                    disabled={loading}
+                  >
+                    {loading ? 'Applying...' : 'Apply Coupon'}
                   </Button>
                 </Col>
                 <Col>
-                  <Form.Control type="text" placeholder="Enter Coupon" />
+                  <Form.Control
+                    type="text"
+                    onChange={(e) => setCode(e.target.value)}
+                    placeholder="Enter Coupon"
+                  />
                 </Col>
               </Row>
+            </ListGroup.Item>
+            <ListGroup.Item>
+              {appliedCoupon && (
+                <Message variant="success">
+                  Coupon applied! You got {appliedCoupon}% discount.
+                </Message>
+              )}
+              {error && <Message variant="danger">{error}</Message>}
             </ListGroup.Item>
             <ListGroup.Item
               style={{
