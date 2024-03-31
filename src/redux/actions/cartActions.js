@@ -20,15 +20,9 @@ export const addToCart = (id, qty) => async (dispatch, getState) => {
       qty
     }
   })
-  const {
-    cart: { cartItems }
-  } = getState()
-  const total = cartItems
-    .reduce((acc, item) => acc + item.qty * item.price, 0)
-    .toFixed(2)
-  dispatch({ type: 'UPDATE_CART_TOTAL', payload: total })
   localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems))
 }
+
 export const removeFromCart = (id) => async (dispatch, getState) => {
   dispatch({
     type: CART_REMOVE_ITEM,
@@ -36,6 +30,7 @@ export const removeFromCart = (id) => async (dispatch, getState) => {
   })
   localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems))
 }
+
 export const saveShippingAddress = (data) => async (dispatch) => {
   dispatch({
     type: CART_SAVE_SHIPPING_ADDRESS,

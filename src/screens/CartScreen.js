@@ -1,31 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  Row,
-  Col,
-  ListGroup,
-  Image,
-  Form,
-  Button,
-  Card,
-  Spinner
-} from 'react-bootstrap'
+import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap'
 import Message from '../components/Message'
 import { addToCart, removeFromCart } from '../redux/actions/cartActions'
 import { applyCoupon } from '../redux/actions/couponActions'
-import { CART_APPLY_COUPON } from '../redux/constants/cartConstants'
 
 const CartScreen = ({ match, location, history }) => {
   const [code, setCode] = useState('')
-  const [discountedTotal, setDiscountedTotal] = useState(null)
-  const [appliedCoupon, setAppliedCoupon] = useState(null)
-  const [isCouponApplied, setIsCouponApplied] = useState(false) // Flag to track if coupon has been applied
+
   const productId = match.params.id
+
   const qty = location.search ? Number(location.search.split('=')[1]) : 1
+
   const dispatch = useDispatch()
+
   const cart = useSelector((state) => state.cart)
   const { cartItems } = cart
+
   const couponApply = useSelector((state) => state.couponApply)
   const { loading, error, coupon } = couponApply
 
@@ -47,32 +39,9 @@ const CartScreen = ({ match, location, history }) => {
     e.preventDefault()
     dispatch(applyCoupon(code))
   }
-
-  const finalTotal = cartItems
+  const total = cartItems
     .reduce((acc, item) => acc + item.qty * item.price, 0)
     .toFixed(2)
-
-  useEffect(() => {
-    if (coupon && coupon.message === 'Coupon code is valid') {
-      const discountPercent = parseFloat(coupon.percent)
-      if (!isNaN(discountPercent)) {
-        const discountAmount = (finalTotal * discountPercent) / 100
-        const newDiscountedTotal = (finalTotal - discountAmount).toFixed(2)
-        setDiscountedTotal(newDiscountedTotal)
-        setAppliedCoupon(coupon.percent)
-        if (!isCouponApplied) {
-          dispatch({ type: CART_APPLY_COUPON, payload: { discountPercent } })
-          setIsCouponApplied(true) // Set the flag to true after dispatching
-        }
-      } else {
-        setDiscountedTotal(finalTotal)
-        setAppliedCoupon(null)
-      }
-    } else {
-      setDiscountedTotal(finalTotal)
-      setAppliedCoupon(null)
-    }
-  }, [coupon, finalTotal, isCouponApplied, dispatch])
 
   return (
     <Row>
@@ -138,22 +107,7 @@ const CartScreen = ({ match, location, history }) => {
             <ListGroup.Item>
               <Row>
                 <Col>Total</Col>
-                <Col> ${finalTotal}</Col>
-              </Row>
-            </ListGroup.Item>
-            <ListGroup.Item>
-              <Row>
-                <Col>Total after discount</Col>
-                <Col>
-                  $
-                  {loading ? (
-                    <Spinner animation="border" />
-                  ) : discountedTotal !== null ? (
-                    discountedTotal
-                  ) : (
-                    finalTotal
-                  )}
-                </Col>
+                <Col> ${total}</Col>
               </Row>
             </ListGroup.Item>
             <ListGroup.Item>
@@ -165,7 +119,7 @@ const CartScreen = ({ match, location, history }) => {
                     className="btn-block"
                     disabled={loading}
                   >
-                    {loading ? 'Applying...' : 'Apply Coupon'}
+                    Apply Coupon
                   </Button>
                 </Col>
                 <Col>
@@ -176,14 +130,6 @@ const CartScreen = ({ match, location, history }) => {
                   />
                 </Col>
               </Row>
-            </ListGroup.Item>
-            <ListGroup.Item>
-              {appliedCoupon && (
-                <Message variant="success">
-                  Coupon applied! You got {appliedCoupon}% discount.
-                </Message>
-              )}
-              {error && <Message variant="danger">{error}</Message>}
             </ListGroup.Item>
             <ListGroup.Item
               style={{

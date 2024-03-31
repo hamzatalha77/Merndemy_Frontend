@@ -27,7 +27,7 @@ export const applyCoupon = (code) => async (dispatch, getState) => {
       { code },
       config
     )
-    console.log(data)
+
     dispatch({
       type: COUPON_APPLY_SUCCESS,
       payload: data
