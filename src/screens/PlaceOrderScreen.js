@@ -1,22 +1,33 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap'
+import { Button, Row, Col, ListGroup, Image, Card, Form } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import CheckoutSteps from '../components/CheckoutSteps'
 import { createOrder } from '../redux/actions/orderActions'
 import { ORDER_CREATE_RESET } from '../redux/constants/orderConstants'
 import { USER_DETAILS_RESET } from '../redux/constants/userConstants'
+import { applyCoupon } from '../redux/actions/couponActions'
 
 const PlaceOrderScreen = ({ history }) => {
   const dispatch = useDispatch()
+  const [code, setCode] = useState('')
+  const [discountedTotal, setDiscountedTotal] = useState(null)
 
   const cart = useSelector((state) => state.cart)
+
+  const couponApply = useSelector((state) => state.couponApply)
+  const { loadingCoupon, errorCoupon, coupon } = couponApply
 
   if (!cart.shippingAddress.address) {
     history.push('/shipping')
   } else if (!cart.paymentMethod) {
     history.push('/payment')
+  }
+
+  const submitCoupon = (e) => {
+    e.preventDefault()
+    dispatch(applyCoupon(code))
   }
 
   const addDecimals = (num) => {
@@ -59,7 +70,17 @@ const PlaceOrderScreen = ({ history }) => {
       })
     )
   }
+  useEffect(() => {
+    if (coupon && coupon.message === 'Coupon code is valid') {
+      const discountPercent = parseFloat(coupon.percent)
+      const discountAmount = (cart.totalPrice * discountPercent) / 100
+      const newTotal = (cart.totalPrice - discountAmount).toFixed(2)
 
+      setDiscountedTotal(newTotal)
+    } else {
+      setDiscountedTotal(null)
+    }
+  }, [coupon, cart.totalPrice])
   return (
     <>
       <CheckoutSteps step1 step2 step3 step4 />
@@ -141,10 +162,32 @@ const PlaceOrderScreen = ({ history }) => {
               <ListGroup.Item>
                 <Row>
                   <Col>Total</Col>
-                  <Col>${cart.totalPrice}</Col>
+                  <Col>
+                    ${discountedTotal ? discountedTotal : cart.totalPrice}
+                  </Col>
                 </Row>
               </ListGroup.Item>
-
+              <ListGroup.Item>
+                <Row>
+                  <Col>
+                    <Button
+                      type="button"
+                      onClick={submitCoupon}
+                      className="btn-block"
+                      disabled={loadingCoupon}
+                    >
+                      Apply Coupon
+                    </Button>
+                  </Col>
+                  <Col>
+                    <Form.Control
+                      type="text"
+                      onChange={(e) => setCode(e.target.value)}
+                      placeholder="Enter Coupon"
+                    />
+                  </Col>
+                </Row>
+              </ListGroup.Item>
               <ListGroup.Item>
                 {error && <Message variant="danger">{error}</Message>}
               </ListGroup.Item>

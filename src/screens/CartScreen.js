@@ -7,8 +7,6 @@ import { addToCart, removeFromCart } from '../redux/actions/cartActions'
 import { applyCoupon } from '../redux/actions/couponActions'
 
 const CartScreen = ({ match, location, history }) => {
-  const [code, setCode] = useState('')
-
   const productId = match.params.id
 
   const qty = location.search ? Number(location.search.split('=')[1]) : 1
@@ -17,9 +15,6 @@ const CartScreen = ({ match, location, history }) => {
 
   const cart = useSelector((state) => state.cart)
   const { cartItems } = cart
-
-  const couponApply = useSelector((state) => state.couponApply)
-  const { loading, error, coupon } = couponApply
 
   useEffect(() => {
     if (productId) {
@@ -35,10 +30,6 @@ const CartScreen = ({ match, location, history }) => {
     history.push('/login?redirect=shipping')
   }
 
-  const submitCoupon = (e) => {
-    e.preventDefault()
-    dispatch(applyCoupon(code))
-  }
   const total = cartItems
     .reduce((acc, item) => acc + item.qty * item.price, 0)
     .toFixed(2)
@@ -107,30 +98,10 @@ const CartScreen = ({ match, location, history }) => {
             <ListGroup.Item>
               <Row>
                 <Col>Total</Col>
-                <Col> ${total}</Col>
+                <Col>${total}</Col>
               </Row>
             </ListGroup.Item>
-            <ListGroup.Item>
-              <Row>
-                <Col>
-                  <Button
-                    type="button"
-                    onClick={submitCoupon}
-                    className="btn-block"
-                    disabled={loading}
-                  >
-                    Apply Coupon
-                  </Button>
-                </Col>
-                <Col>
-                  <Form.Control
-                    type="text"
-                    onChange={(e) => setCode(e.target.value)}
-                    placeholder="Enter Coupon"
-                  />
-                </Col>
-              </Row>
-            </ListGroup.Item>
+
             <ListGroup.Item
               style={{
                 justifyContent: 'center',
