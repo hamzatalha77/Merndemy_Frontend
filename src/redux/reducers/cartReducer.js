@@ -29,6 +29,7 @@ export const cartReducer = (
           cartItems: [...state.cartItems, item]
         }
       }
+
     case CART_REMOVE_ITEM:
       return {
         ...state,
