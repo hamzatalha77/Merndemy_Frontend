@@ -17,17 +17,12 @@ const PlaceOrderScreen = ({ history }) => {
   const cart = useSelector((state) => state.cart)
 
   const couponApply = useSelector((state) => state.couponApply)
-  const { loadingCoupon, errorCoupon, coupon } = couponApply
+  const { loading: loadingCoupon, error: errorCoupon, coupon } = couponApply
 
   if (!cart.shippingAddress.address) {
     history.push('/shipping')
   } else if (!cart.paymentMethod) {
     history.push('/payment')
-  }
-
-  const submitCoupon = (e) => {
-    e.preventDefault()
-    dispatch(applyCoupon(code))
   }
 
   const addDecimals = (num) => {
@@ -78,13 +73,23 @@ const PlaceOrderScreen = ({ history }) => {
       const discountPercent = parseFloat(coupon.percent)
       const discountAmount = (cart.totalPrice * discountPercent) / 100
       const newTotal = (cart.totalPrice - discountAmount).toFixed(2)
-
+      localStorage.setItem('discountedTotal', newTotal)
       setDiscountedTotal(newTotal)
-      setCode('')
     } else {
       setDiscountedTotal(null)
     }
   }, [coupon, cart.totalPrice])
+  useEffect(() => {
+    const savedDiscountedTotal = localStorage.getItem('discountedTotal')
+    if (savedDiscountedTotal) {
+      setDiscountedTotal(savedDiscountedTotal)
+    }
+  }, [])
+  const submitCoupon = (e) => {
+    e.preventDefault()
+    dispatch(applyCoupon(code))
+    setCode('')
+  }
   return (
     <>
       <CheckoutSteps step1 step2 step3 step4 />
@@ -170,13 +175,16 @@ const PlaceOrderScreen = ({ history }) => {
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
-                <Row>
-                  <Col>Total After Discount</Col>
-                  <Col>
-                    ${discountedTotal ? discountedTotal : cart.totalPrice}
-                  </Col>
-                </Row>
+                {coupon && coupon.message === 'Coupon code is valid' && (
+                  <Row>
+                    <Col>Total After Discount</Col>
+                    <Col>
+                      ${discountedTotal ? discountedTotal : cart.totalPrice}
+                    </Col>
+                  </Row>
+                )}
               </ListGroup.Item>
+
               <ListGroup.Item>
                 <Row>
                   <Col>
@@ -200,8 +208,10 @@ const PlaceOrderScreen = ({ history }) => {
               </ListGroup.Item>
               <ListGroup.Item>
                 {error && <Message variant="danger">{error}</Message>}
+              </ListGroup.Item>
+              <ListGroup.Item>
                 {errorCoupon && (
-                  <Message variant="danger">{errorCoupon}</Message>
+                  <Message variant="warning">{errorCoupon}</Message>
                 )}
               </ListGroup.Item>
               <ListGroup.Item
