@@ -54,11 +54,10 @@ const PlaceOrderScreen = ({ history }) => {
       dispatch({ type: USER_DETAILS_RESET })
       dispatch({ type: ORDER_CREATE_RESET })
     }
-    // eslint-disable-next-line
-  }, [history, success])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, history, success])
 
   const placeOrderHandler = () => {
-    // Use discountedTotal if available, otherwise use cart.totalPrice
     const totalPriceToUse = discountedTotal ? discountedTotal : cart.totalPrice
 
     dispatch(
@@ -69,7 +68,7 @@ const PlaceOrderScreen = ({ history }) => {
         itemsPrice: cart.itemsPrice,
         shippingPrice: cart.shippingPrice,
         taxPrice: cart.taxPrice,
-        totalPrice: totalPriceToUse // Use totalPriceToUse here
+        totalPrice: totalPriceToUse
       })
     )
   }
@@ -81,6 +80,7 @@ const PlaceOrderScreen = ({ history }) => {
       const newTotal = (cart.totalPrice - discountAmount).toFixed(2)
 
       setDiscountedTotal(newTotal)
+      setCode('')
     } else {
       setDiscountedTotal(null)
     }
@@ -166,6 +166,12 @@ const PlaceOrderScreen = ({ history }) => {
               <ListGroup.Item>
                 <Row>
                   <Col>Total</Col>
+                  <Col>${cart.totalPrice}</Col>
+                </Row>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <Row>
+                  <Col>Total After Discount</Col>
                   <Col>
                     ${discountedTotal ? discountedTotal : cart.totalPrice}
                   </Col>
