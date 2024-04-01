@@ -58,6 +58,9 @@ const PlaceOrderScreen = ({ history }) => {
   }, [history, success])
 
   const placeOrderHandler = () => {
+    // Use discountedTotal if available, otherwise use cart.totalPrice
+    const totalPriceToUse = discountedTotal ? discountedTotal : cart.totalPrice
+
     dispatch(
       createOrder({
         orderItems: cart.cartItems,
@@ -66,10 +69,11 @@ const PlaceOrderScreen = ({ history }) => {
         itemsPrice: cart.itemsPrice,
         shippingPrice: cart.shippingPrice,
         taxPrice: cart.taxPrice,
-        totalPrice: cart.totalPrice
+        totalPrice: totalPriceToUse // Use totalPriceToUse here
       })
     )
   }
+
   useEffect(() => {
     if (coupon && coupon.message === 'Coupon code is valid') {
       const discountPercent = parseFloat(coupon.percent)
