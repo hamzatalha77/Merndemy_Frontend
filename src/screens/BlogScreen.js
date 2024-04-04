@@ -46,6 +46,7 @@ const BlogScreen = ({ match, history }) => {
       setComments([...comments, { text: comment, postedBy: userInfo }])
       setComment('')
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [successBlogComment, comment, userInfo])
 
   const addComment = (e) => {
