@@ -146,69 +146,35 @@ const ProductCreateScreen = ({ history }) => {
 
           <Form.Group controlId="category">
             <Form.Label>Category</Form.Label>
-            <div className="dropdown">
-              <button
-                className="btn btn-secondary dropdown-toggle"
-                type="button"
-                id="categoryDropdown"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                {category
-                  ? categories.find((cat) => cat._id === category)
-                      ?.category_name
-                  : 'Select Category'}
-              </button>
-              <ul className="dropdown-menu" aria-labelledby="categoryDropdown">
-                {categories.map((category) => (
-                  <li
-                    key={category._id}
-                    onClick={() =>
-                      handleCategoryChange({ target: { value: category._id } })
-                    }
-                  >
-                    {category.category_name}
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <Form.Control as="select" onChange={handleCategoryChange}>
+              <option value="">Select Category</option>
+              {categories.map((category) => (
+                <option key={category._id} value={category._id}>
+                  {category.category_name}
+                </option>
+              ))}
+            </Form.Control>
           </Form.Group>
-
           <Form.Group controlId="subcategory">
             <Form.Label>SubCategory</Form.Label>
-            <div className="dropdown">
-              <button
-                className="btn btn-secondary dropdown-toggle"
-                type="button"
-                id="subcategoryDropdown"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                {subCategory
-                  ? subCategories.find((subCat) => subCat._id === subCategory)
-                      ?.subCategory_name
-                  : 'Select Subcategory'}
-              </button>
-              <ul
-                className="dropdown-menu"
-                aria-labelledby="subcategoryDropdown"
-              >
-                {loadingSubCategories ? (
-                  <li>Loading...</li>
-                ) : errorSubCategories ? (
-                  <li>{errorSubCategories}</li>
-                ) : (
-                  subCategories.map((subCategory) => (
-                    <li
-                      key={subCategory._id}
-                      onClick={() => setSubCategory(subCategory._id)}
-                    >
-                      {subCategory.subCategory_name}
-                    </li>
-                  ))
-                )}
-              </ul>
-            </div>
+            <Form.Control
+              as="select"
+              value={subCategory}
+              onChange={(e) => setSubCategory(e.target.value)}
+            >
+              <option value="">Select Subcategory</option>
+              {loadingSubCategories ? (
+                <option>Loading...</option>
+              ) : errorSubCategories ? (
+                <option>{errorSubCategories}</option>
+              ) : (
+                subCategories.map((subCategory) => (
+                  <option key={subCategory._id} value={subCategory._id}>
+                    {subCategory.subCategory_name}
+                  </option>
+                ))
+              )}
+            </Form.Control>
           </Form.Group>
 
           <Form.Group controlId="formFileLg" className="mb-3">
