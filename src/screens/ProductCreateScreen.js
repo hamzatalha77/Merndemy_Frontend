@@ -163,7 +163,9 @@ const ProductCreateScreen = ({ history }) => {
                 {categories.map((category) => (
                   <li
                     key={category._id}
-                    onClick={() => handleCategoryChange(category._id)}
+                    onClick={() =>
+                      handleCategoryChange({ target: { value: category._id } })
+                    }
                   >
                     {category.category_name}
                   </li>
@@ -171,6 +173,7 @@ const ProductCreateScreen = ({ history }) => {
               </ul>
             </div>
           </Form.Group>
+
           <Form.Group controlId="subcategory">
             <Form.Label>SubCategory</Form.Label>
             <div className="dropdown">
