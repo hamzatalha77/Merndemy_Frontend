@@ -173,24 +173,39 @@ const ProductCreateScreen = ({ history }) => {
           </Form.Group>
           <Form.Group controlId="subcategory">
             <Form.Label>SubCategory</Form.Label>
-            <Form.Control
-              as="select"
-              value={subCategory}
-              onChange={(e) => setSubCategory(e.target.value)}
-            >
-              <option value="">Select Subcategory</option>
-              {loadingSubCategories ? (
-                <option>Loading...</option>
-              ) : errorSubCategories ? (
-                <option>{errorSubCategories}</option>
-              ) : (
-                subCategories.map((subCategory) => (
-                  <option key={subCategory._id} value={subCategory._id}>
-                    {subCategory.subCategory_name}
-                  </option>
-                ))
-              )}
-            </Form.Control>
+            <div className="dropdown">
+              <button
+                className="btn btn-secondary dropdown-toggle"
+                type="button"
+                id="subcategoryDropdown"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                {subCategory
+                  ? subCategories.find((subCat) => subCat._id === subCategory)
+                      ?.subCategory_name
+                  : 'Select Subcategory'}
+              </button>
+              <ul
+                className="dropdown-menu"
+                aria-labelledby="subcategoryDropdown"
+              >
+                {loadingSubCategories ? (
+                  <li>Loading...</li>
+                ) : errorSubCategories ? (
+                  <li>{errorSubCategories}</li>
+                ) : (
+                  subCategories.map((subCategory) => (
+                    <li
+                      key={subCategory._id}
+                      onClick={() => setSubCategory(subCategory._id)}
+                    >
+                      {subCategory.subCategory_name}
+                    </li>
+                  ))
+                )}
+              </ul>
+            </div>
           </Form.Group>
 
           <Form.Group controlId="formFileLg" className="mb-3">
