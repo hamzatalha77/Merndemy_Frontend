@@ -146,14 +146,30 @@ const ProductCreateScreen = ({ history }) => {
 
           <Form.Group controlId="category">
             <Form.Label>Category</Form.Label>
-            <Form.Control as="select" onChange={handleCategoryChange}>
-              <option value="">Select Category</option>
-              {categories.map((category) => (
-                <option key={category._id} value={category._id}>
-                  {category.category_name}
-                </option>
-              ))}
-            </Form.Control>
+            <div className="dropdown">
+              <button
+                className="btn btn-secondary dropdown-toggle"
+                type="button"
+                id="categoryDropdown"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                {category
+                  ? categories.find((cat) => cat._id === category)
+                      ?.category_name
+                  : 'Select Category'}
+              </button>
+              <ul className="dropdown-menu" aria-labelledby="categoryDropdown">
+                {categories.map((category) => (
+                  <li
+                    key={category._id}
+                    onClick={() => handleCategoryChange(category._id)}
+                  >
+                    {category.category_name}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </Form.Group>
           <Form.Group controlId="subcategory">
             <Form.Label>SubCategory</Form.Label>
