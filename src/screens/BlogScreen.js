@@ -131,7 +131,7 @@ const BlogScreen = ({ match, history }) => {
                       </form>
                     ) : (
                       <Message>
-                        Please <Link to="/login">sign In </Link>To Write a
+                        Please <Link to="/login">Sign In </Link>To Write a
                         Review
                       </Message>
                     )}
