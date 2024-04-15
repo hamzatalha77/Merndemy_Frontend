@@ -143,7 +143,7 @@ h2 {
 .left_2 img {
   width: 500px;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
 }
 .active-img {
   border: 1.5px solid #1e7ed8;
